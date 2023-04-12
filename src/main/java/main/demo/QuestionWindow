@@ -1,0 +1,55 @@
+package main.demo;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.util.Arrays;
+import java.util.List;
+
+public class QuestionWindow extends Application {
+    private String questionText;
+    private List<String> answerOptions;
+
+    public QuestionWindow(String questionText, List<String> answerOptions) {
+        this.questionText = questionText;
+        this.answerOptions = answerOptions;
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("QuestionWindow.fxml"));
+        loader.setControllerFactory(controller -> new QuestionController(questionText, answerOptions));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        QuestionWindow questionWindow = new QuestionWindow(
+                "What is the capital of France?",
+                Arrays.asList("London", "Paris", "Berlin", "Madrid")
+        );
+        questionWindow.launch(args);
+    }
+}
+
+class QuestionController {
+    private String questionText;
+    private List<String> answerOptions;
+
+    public QuestionController(String questionText, List<String> answerOptions) {
+        this.questionText = questionText;
+        this.answerOptions = answerOptions;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public List<String> getAnswerOptions() {
+        return answerOptions;
+    }
+}
