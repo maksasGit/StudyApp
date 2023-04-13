@@ -1,22 +1,27 @@
 package main.demo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Test {
-    // basic info
+
+
+    // add basic info about Test and Test result's
 
     private String testLabel;
     private List<Question> questions;
     private List<Integer> testResult;
 
 
-    public Test(String testLabel, List<Question> questions,  List<Integer> testResult) {
+    public Test(String testLabel, List<Question> questions) {
         this.testLabel = testLabel;
         this.questions = questions;
-        this.testResult = testResult;
     }
+
+    public Test() {
+        this.testLabel = "Тестовый тест";
+        this.questions = new ArrayList<>(Arrays.asList(new Question(), new Question(), new Question(), new Question()));
+    }
+
 
     public String getTestLabel() {
         return testLabel;
@@ -36,6 +41,7 @@ public class Test {
         Collections.shuffle(shuffledList);
         return shuffledList;
     }
+
 
 
 }

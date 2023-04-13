@@ -35,7 +35,7 @@ public class Question {
         return correctAnswers;
     }
 
-    public int isCorrectAnswers(List<String> selectedAnswers) {
+    public int correctAnswersResult(List<String> selectedAnswers) {
         int result = 0;
         for (String selected : selectedAnswers) {
             for (String correct : correctAnswers){
@@ -47,7 +47,7 @@ public class Question {
         return result;
     }
 
-    public List<String> shuffleAnswers() {
+    public  List<String> shuffleAnswers() {
         List<String> shuffledList = new ArrayList<>(answerOptions);
         Collections.shuffle(shuffledList);
         return shuffledList;

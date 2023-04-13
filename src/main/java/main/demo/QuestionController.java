@@ -28,13 +28,12 @@ public class QuestionController {
 
     public QuestionController(Question question) {
         this.questionText = question.getQuestionText();
-        this.answerOptions = question.getAnswerOptions();
+        this.answerOptions = question.shuffleAnswers();
     }
 
     @FXML
     public void initialize() {
         questionLabel.setText(questionText);
-
         for (String answerOption : answerOptions) {
             Button answerButton = new Button(answerOption);
             answerButton.setId(answerOption);
@@ -58,17 +57,8 @@ public class QuestionController {
 
     @FXML
     public void handleCommitButtonClick() {
-        try {
-            Question question = new Question();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("QuestionWindow.fxml"));
-            loader.setControllerFactory(controller -> new QuestionController(question));
-            Parent root = (Parent) loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // add if it's last test and go to TestEndPage
+        Start.nextQuestionWindow();
         Stage stage = (Stage) mainStage.getScene().getWindow();
         stage.close();
     }
