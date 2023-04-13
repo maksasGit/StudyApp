@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.demo.QuestionController">
+<VBox fx:id="mainStage" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.demo.QuestionController">
   <Label fx:id="questionLabel" />
   <VBox fx:id="answerBox" />
   <Button fx:id="commit" onAction="#handleCommitButtonClick" text="Click me!"/>

@@ -1,10 +1,15 @@
 package main.demo;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +21,8 @@ public class QuestionController {
     @FXML
     private VBox answerBox;
 
+    @FXML
+    private VBox mainStage;
     private String questionText;
     private List<String> answerOptions;
 
@@ -51,6 +58,18 @@ public class QuestionController {
 
     @FXML
     public void handleCommitButtonClick() {
-
+        try {
+            Question question = new Question();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("QuestionWindow.fxml"));
+            loader.setControllerFactory(controller -> new QuestionController(question));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = (Stage) mainStage.getScene().getWindow();
+        stage.close();
     }
 }
