@@ -24,7 +24,7 @@ public class Main extends Application {
 //        serverThread.setDaemon(true);
 //        serverThread.start();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("TeacherMain.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StudentMain.fxml"));
 //        fxmlLoader.setControllerFactory(controllerClass -> new MainContainer(serverThread, receiver));
 
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
