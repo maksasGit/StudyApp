@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class Server {
     private ServerSocket serverSocket;
-
     private Storage storage = new Storage();
     private List<ClientThread> clients = new ArrayList<>();
 
@@ -21,7 +20,6 @@ public class Server {
             e.printStackTrace();
         }
     }
-
     public void listen(){
         System.out.println("Server Start");
         while(true){
@@ -38,12 +36,9 @@ public class Server {
         }
     }
 
-
-
     public void removeClient(ClientThread client) {
         clients.remove(client);
     }
-
 
     private Optional<ClientThread> getClient(String clientName) {
         return clients.stream()

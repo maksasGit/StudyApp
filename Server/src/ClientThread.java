@@ -31,9 +31,7 @@ public class ClientThread extends Thread {
                     case "LO" -> login(postfix);
                     case "TI" -> server.getTestInfo(this,postfix);
                 }
-
             }
-            System.out.println("closed");
             server.removeClient(this);
         }
         catch (IOException e) {
