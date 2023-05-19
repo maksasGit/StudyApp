@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/imaks/OneDrive/Desktop/StudyApp/Client</OriginalElement>
+  <nodes>
+    <node x="-467.4339667857186" y="427.8343230408111">com.example.client.MainContainer</node>
+    <node x="-426.4280693297609" y="1164.8571869962593">com.example.client.TeacherMainController</node>
+    <node x="-96.68492735298392" y="904.9243815077238">com.example.client.TestManager</node>
+    <node x="-407.9280693297609" y="904.9243815077238">com.example.client.Main</node>
+    <node x="-407.9280693297609" y="1073.0144399746364">com.example.client.AdminController</node>
+    <node x="-79.68492735298389" y="643.852460905822">com.example.client.ServerThread</node>
+    <node x="-698.0076586415673" y="862.4587414550945">com.example.client.StudentMainController</node>
+    <node x="-96.68492735298392" y="427.8343230408111">com.example.client.ClientGUIReceiver</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic" zoom="0.7266009852216748" showDependencies="false" x="-268.5" y="823.0" />
+  <SelectedNodes>
+    <node>com.example.client.StudentMainController</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

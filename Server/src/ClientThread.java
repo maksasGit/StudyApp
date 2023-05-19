@@ -29,7 +29,7 @@ public class ClientThread extends Thread {
                 System.out.println("Server received: " +message);
                 switch(prefix) {
                     case "LO" -> login(postfix);
-                    case "TI" -> server.getTestInfo(this,postfix);
+                    case "TI" -> server.sendTest(this,postfix);
                 }
             }
             server.removeClient(this);
@@ -51,7 +51,7 @@ public class ClientThread extends Thread {
     public void login(String name) {
         clientName = name;
         // server.online(this);
-        server.sendTestsList(this);
+        //server.sendTestsList(this);
     }
 
 
