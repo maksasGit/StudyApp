@@ -37,12 +37,15 @@ public class Server {
         }
     }
 
+
+    //################################################################################
+    //############################NEEED?##############################################
+
     public void removeClient(ClientThread client) {
         clients.remove(client);
     }
 
 
-  //#################################################################################
     private Optional<ClientThread> getClient(String clientName) {
         return clients.stream()
                 .filter(client -> clientName.equals(client.getClientName()))
@@ -75,14 +78,14 @@ public class Server {
 
 
     // sendTest
-        public void sendTest(ClientThread receiver, String testID){
-            Test test = storage.getTestbyID(testID);
-            String testQuestions = "";
-            for (Question question : test.shuffleQuestions()){
-                testQuestions = testQuestions.concat(question.getQuestionText()+"::");
-            }
-            receiver.send("TQ"+testQuestions);
-        }
+//        public void sendTest(ClientThread receiver, String testID){
+//            Test test = storage.getTestbyID(testID);
+//            String testQuestions = "";
+//            for (Question question : test.shuffleQuestions()){
+//                testQuestions = testQuestions.concat(question.getQuestionText()+"::");
+//            }
+//            receiver.send("TQ"+testQuestions);
+//        }
 
 
     //###############################################################################
