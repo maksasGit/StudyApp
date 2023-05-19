@@ -7,9 +7,6 @@ public class Test {
 
     private String testLabel;
     private List<Question> questions;
-
-
-
     private String testID;
 
 
