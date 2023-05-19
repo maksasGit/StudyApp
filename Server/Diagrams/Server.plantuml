@@ -1,0 +1,89 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Answer {
+  + Answer(String, SolutionStatus): 
+  - answer: String
+  - solutionStatus: SolutionStatus
+}
+class ClientThread {
+  + ClientThread(Socket, Server): 
+  - socket: Socket
+  - clientName: String
+  - writer: PrintWriter
+  - server: Server
+  + run(): void
+  + getSocket(): Socket
+  + login(String): void
+  + getClientName(): String
+  + send(String): void
+}
+class Main {
+  + Main(): 
+  + main(String[]): void
+}
+class Question {
+  + Question(): 
+  + Question(String): 
+  - questionText: String
+  + getQuestionText(): String
+}
+class Server {
+  + Server(int): 
+  - serverSocket: ServerSocket
+  - clients: List<ClientThread>
+  - storage: Storage
+  + getTestInfo(ClientThread, String): void
+  + removeClient(ClientThread): void
+  - getClient(String): Optional<ClientThread>
+  + sendTestsList(ClientThread): void
+  + listen(): void
+}
+class Storage {
+  + Storage(): 
+  - tests: List<Test>
+  + connect(): Connection
+  + getTests(): List<Test>
+  + getTestbyID(String): Test
+}
+class Subject {
+  + Subject(String): 
+  - topics: List<Topic>
+  - subjectName: String
+  + addTopic(Topic): void
+  + getTopics(): List<Topic>
+  + getSubjectName(): String
+}
+class Test {
+  + Test(): 
+  + Test(String, List<Question>): 
+  + Test(String): 
+  - questions: List<Question>
+  - testLabel: String
+  - testID: String
+  - IDGenerate(int): String
+  + getQuestions(): List<Question>
+  + shuffleQuestions(): List<Question>
+  + getTestID(): String
+  + getTestLabel(): String
+}
+class Topic {
+  + Topic(String): 
+  - topicName: String
+  - tests: List<Test>
+  + getTests(): List<Test>
+  + getTopicName(): String
+  + addTest(Test): void
+}
+class Try {
+  + Try(List<String>, List<String>, int): 
+  - result: int
+  - questions: List<String>
+  - answers: List<String>
+  + update(): void
+}
+
+@enduml
