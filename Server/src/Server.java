@@ -59,8 +59,8 @@ public class Server {
     // send Tree
 
     public void sendSubjectTopicTestTree(ClientThread receiver) {
-        // get all subject -> topic -> test and send it to make as tree
-        receiver.send("TR");
+        String result = storage.getTree();
+        receiver.send("TR" + result);
     }
 
 

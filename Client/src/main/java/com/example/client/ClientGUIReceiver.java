@@ -7,20 +7,18 @@ import java.util.List;
 
 public class ClientGUIReceiver {
 
-    MainContainer mainController = null;
+    StudentMainController controller = null;
 
-    public void setMainController(MainContainer mainController) {
-        this.mainController = mainController;
+    public ClientGUIReceiver() {
+    }
+
+    public void setStudentMainController(StudentMainController controller) {
+        this.controller = controller;
     }
 
 
-    public void receiveTestList(String[] strings) {
-        mainController.setTestsList(Arrays.stream(strings).toList());
-    }
-
-    public void receiveTestQuestions(String[] strings){
-        TestManager.resetQuestions(List.of(strings));
-        mainController.showTestQuestion(TestManager.nextQuestion());
+    public void getTree(String textTree){
+        this.controller.updateTreeView(textTree);
     }
 
 

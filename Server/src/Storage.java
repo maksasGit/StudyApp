@@ -7,7 +7,6 @@ public class Storage {
 
     public Storage() {
         connect();
-        System.out.println(getTree());
     }
 
     public Connection connect() {

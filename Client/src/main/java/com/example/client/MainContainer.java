@@ -18,7 +18,6 @@ public class MainContainer {
     public MainContainer(ServerThread serverThread, ClientGUIReceiver receiver) {
         this.serverThread = serverThread;
         this.receiver = receiver;
-        this.receiver.setMainController(this);
     }
     @FXML
     private TextField inputField;

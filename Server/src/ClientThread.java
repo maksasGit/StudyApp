@@ -29,7 +29,7 @@ public class ClientThread extends Thread {
                 System.out.println("Server received: " +message);
                 switch(prefix) {
                     case "LO" -> login(postfix);
-
+                    case "TR" -> server.sendSubjectTopicTestTree(this);
                 }
             }
             server.removeClient(this);

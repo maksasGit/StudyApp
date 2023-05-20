@@ -54,14 +54,12 @@ public class ServerThread extends Thread {
             while((message = reader.readLine()) != null) {
                 String prefix = message.substring(0, 2);
                 String postfix = message.substring(2);
-                System.out.println(message);
+                System.out.println("Server received" + message);
                 String[] postfixArr;
                 switch (prefix) {
-                    case "TL":
-                        this.receiver.receiveTestList(postfix.split("::"));
+                    case "TR":
+                        this.receiver.getTree(postfix);
                         break;
-                    case "TQ":
-                        this.receiver.receiveTestQuestions(postfix.split("::"));
                 }
             }
         } catch (IOException var10) {
@@ -70,7 +68,8 @@ public class ServerThread extends Thread {
 
     }
 
-    private void send(String message) {
+    public void send(String message) {
+        System.out.println("Send to server" + message);
         this.writer.println(message);
     }
 
