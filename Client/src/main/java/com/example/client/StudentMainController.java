@@ -1,8 +1,10 @@
 package com.example.client;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -51,19 +53,26 @@ public class StudentMainController {
         addItemsToTreeView(root, newTree.items, 1);
     }
 
+
     private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
         for (StringID item : items) {
             TreeItem<String> newItem = new TreeItem<>(item.name);
             String itemCode = depth + ":" + item.id;
-            newItem.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
+
+            parentItem.getChildren().add(newItem);
+            addItemsToTreeView(newItem, item.items, depth + 1);
+
+            newItem.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                     System.out.println(itemCode);
                 }
             });
-            parentItem.getChildren().add(newItem);
-            addItemsToTreeView(newItem, item.items, depth + 1);
         }
+    }
+
+    public void selectedTreeItem(){
+        TreeItem<String> item = (TreeItem<String>) tree.getSelectionModel().getSelectedItem();
+        System.out.println(item.getValue());
     }
 
 
