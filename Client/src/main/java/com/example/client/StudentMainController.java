@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
@@ -87,7 +88,6 @@ public class StudentMainController {
 
     public void getTest(String testQuestions){
         String[] questionsFromText = testQuestions.split("##");
-
         for (String questionFromText : questionsFromText){
             String[] questionPart = questionFromText.split("\\*\\*");
             currentTry.addQuestion(new Question(questionPart[0] , Integer.parseInt(questionPart[1])));
@@ -97,7 +97,18 @@ public class StudentMainController {
 
     public void showNextQuestion(){
         outputArea.clear();
-        outputArea.appendText(currentTry.nextQuestion());
+        String questionText = currentTry.nextQuestion();
+        if (questionText.equals("Finish")){
+            // send Try (test_id + (answer, question_num))
+            String testID = String.valueOf(currentTry.testId);
+            String answerQuestionNum = "";
+            for (Question question : currentTry.questions){
+                String answer = question.answer + "::" + question.question_num;
+                answerQuestionNum = answerQuestionNum.concat(answer+"**");
+            }
+            serverThread.send("TT" + testID + "**" + answerQuestionNum);
+        }
+        outputArea.appendText(questionText);
 
     }
 

@@ -71,14 +71,13 @@ public class Server {
     // getTry
 
         public void getTry(ClientThread sender, String stringTry){
-            //Try newTry = Try(stringTry)
+            //stringTry = testID**(answer::questionNum)**(answer::questionNum)
             // storage.saveTry(newTry)
         }
 
-
-
     // sendTest
         public void sendTest(ClientThread receiver, String testID){
+            // add if user try test , then send TryResult
             String testQuestions = storage.getTestByID(testID);
             receiver.send("ST"+testQuestions);
         }

@@ -22,6 +22,7 @@ public class ClientGUIReceiver {
     }
 
     public void getTestQuestions(String testQuestions){
+        // add if From Server get TryResult
         this.controller.getTest(testQuestions);
     }
 

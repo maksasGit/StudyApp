@@ -31,6 +31,7 @@ public class ClientThread extends Thread {
                     case "LO" -> login(postfix);
                     case "TR" -> server.sendSubjectTopicTestTree(this);
                     case "GT" -> server.sendTest(this,postfix);
+                    case "TT" -> server.getTry(this,postfix);
                 }
             }
             server.removeClient(this);

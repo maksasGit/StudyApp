@@ -30,6 +30,7 @@ public class Try {
 
 
     public void setAnswer(String answer){
+
         if (currentQuestion < questions.size()) {
             questions.get(currentQuestion).answer = answer;
             currentQuestion++;
