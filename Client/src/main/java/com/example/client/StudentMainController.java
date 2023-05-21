@@ -87,25 +87,23 @@ public class StudentMainController {
 
     public void getTest(String testQuestions){
         String[] questionsFromText = testQuestions.split("##");
-        for (String string : questionsFromText){
-            System.out.println(string);
-        }
+
         for (String questionFromText : questionsFromText){
             String[] questionPart = questionFromText.split("\\*\\*");
             currentTry.addQuestion(new Question(questionPart[0] , Integer.parseInt(questionPart[1])));
-        }
-        for (Question question : currentTry.questions){
-            System.out.println(question.question);
         }
         showNextQuestion();
     }
 
     public void showNextQuestion(){
+        outputArea.clear();
         outputArea.appendText(currentTry.nextQuestion());
+
     }
 
     public void setAnswer(){
         currentTry.setAnswer(textArea.getText());
+        textArea.clear();
         showNextQuestion();
     }
 

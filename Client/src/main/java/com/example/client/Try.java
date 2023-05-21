@@ -22,16 +22,19 @@ public class Try {
     }
 
     public String nextQuestion(){
-        if (currentQuestion> questions.size()-1) {
+        if (currentQuestion >= questions.size()) {
             return "Finish";
         }
-        return questions.get(currentQuestion).question;
+        else return questions.get(currentQuestion).question;
     }
 
 
     public void setAnswer(String answer){
-        questions.get(currentQuestion).answer = answer;
-        currentQuestion++;
+        if (currentQuestion < questions.size()) {
+            questions.get(currentQuestion).answer = answer;
+            currentQuestion++;
+        }
+        // else show that test is end and wait for result
     }
 
     // shuffle quesions

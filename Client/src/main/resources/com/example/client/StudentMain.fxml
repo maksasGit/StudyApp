@@ -13,7 +13,7 @@
             <HBox fx:id="mainMenu" prefHeight="94.0" prefWidth="451.0">
                <children>
                   <TextField fx:id="textArea" />
-                  <Button fx:id="send" mnemonicParsing="false" text="Send" />
+                  <Button fx:id="send" mnemonicParsing="false" onAction="#setAnswer" text="Send" />
                   <Button fx:id="back" mnemonicParsing="false" text="Back" />
                </children>
             </HBox>
