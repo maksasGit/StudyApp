@@ -1,9 +1,13 @@
 package com.example.client;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 public class TeacherMainController {
 
@@ -34,6 +38,38 @@ public class TeacherMainController {
     private TextField textArea;
     @FXML
     private TextArea outputArea;
+
+
+    public void updateTreeView(String textTree) {
+        TreeItem<String> root = new TreeItem<>("My Subjects" );
+        tree.setRoot(root);
+        Tree newTree = Tree.fromSend(textTree);
+        addItemsToTreeView(root, newTree.items, 1);
+
+        tree.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(new ChangeListener<TreeItem<String>>() {
+                    @Override
+                    public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> t1) {
+                        System.out.println("Selected item: " + t1.getValue());
+                    }
+                });
+    }
+
+    private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
+        for (StringID item : items) {
+            TreeItem<String> newItem = new TreeItem<>(item.name+":"+depth+":"+item.id);
+            String itemCode = depth + ":" + item.id;
+            parentItem.getChildren().add(newItem);
+            addItemsToTreeView(newItem, item.items, depth + 1);
+        }
+    }
+
+
+    public void initialize(){
+        serverThread.send("TR");
+    }
+
 
 
     //#####################################################################

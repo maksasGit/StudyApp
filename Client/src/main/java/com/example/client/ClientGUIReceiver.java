@@ -23,7 +23,12 @@ public class ClientGUIReceiver {
     public void setTeacherController(TeacherMainController controller) {this.teacherController = controller;}
 
     public void getTree(String textTree){
-        this.studentController.updateTreeView(textTree);
+        if (studentController == null) {
+            this.teacherController.updateTreeView(textTree);
+        }
+        if (teacherController == null){
+            this.studentController.updateTreeView(textTree);
+        }
     }
 
     public void getTestQuestions(String testQuestions){
