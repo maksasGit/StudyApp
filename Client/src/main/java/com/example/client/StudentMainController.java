@@ -21,6 +21,9 @@ public class StudentMainController {
     ServerThread serverThread;
     ClientGUIReceiver receiver;
 
+    Try currentTry = new Try();
+
+
     public StudentMainController(ServerThread serverThread, ClientGUIReceiver receiver) {
         this.serverThread = serverThread;
         this.receiver = receiver;
@@ -64,14 +67,14 @@ public class StudentMainController {
                         String[] parts = t1.getValue().split(":");
                         if (parts.length == 3) {
                             if (parts[1].equals("3")) {
-                                serverThread.send("GT" + parts[2]);
                                 outputLabel.setText(parts[0]);
+                                currentTry.testId = Integer.parseInt(parts[2]);
+                                serverThread.send("GT" + parts[2]);
                             }
                         }
                     }
                 });
     }
-
 
     private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
         for (StringID item : items) {
@@ -79,8 +82,31 @@ public class StudentMainController {
             String itemCode = depth + ":" + item.id;
             parentItem.getChildren().add(newItem);
             addItemsToTreeView(newItem, item.items, depth + 1);
-
         }
+    }
+
+    public void getTest(String testQuestions){
+        String[] questionsFromText = testQuestions.split("##");
+        for (String string : questionsFromText){
+            System.out.println(string);
+        }
+        for (String questionFromText : questionsFromText){
+            String[] questionPart = questionFromText.split("\\*\\*");
+            currentTry.addQuestion(new Question(questionPart[0] , Integer.parseInt(questionPart[1])));
+        }
+        for (Question question : currentTry.questions){
+            System.out.println(question.question);
+        }
+        showNextQuestion();
+    }
+
+    public void showNextQuestion(){
+        outputArea.appendText(currentTry.nextQuestion());
+    }
+
+    public void setAnswer(){
+        currentTry.setAnswer(textArea.getText());
+        showNextQuestion();
     }
 
     public void selectedTreeItem(){

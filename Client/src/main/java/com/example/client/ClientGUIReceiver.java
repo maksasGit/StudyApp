@@ -21,5 +21,9 @@ public class ClientGUIReceiver {
         this.controller.updateTreeView(textTree);
     }
 
+    public void getTestQuestions(String testQuestions){
+        this.controller.getTest(testQuestions);
+    }
+
 
 }

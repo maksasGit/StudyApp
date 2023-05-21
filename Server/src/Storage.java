@@ -112,7 +112,7 @@ public class Storage {
             while (resultSet.next()) {
                 String question = resultSet.getString("question");
                 int questionNum = resultSet.getInt("question_num");
-                testString.append(question).append("***").append(questionNum).append("****");
+                testString.append(question).append("**").append(questionNum).append("##");
             }
 
             resultSet.close();
