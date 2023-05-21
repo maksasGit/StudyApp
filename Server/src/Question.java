@@ -5,11 +5,8 @@ import java.util.List;
 
 public class Question {
     private String questionText;
+    private int questionNum;
 
-
-    public Question(){
-        this.questionText =  "What is the capital of France?";
-    }
 
     public Question(String questionText){
         this.questionText =  questionText;

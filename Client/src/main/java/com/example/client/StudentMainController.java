@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -49,7 +50,7 @@ public class StudentMainController {
 
 
     public void updateTreeView(String textTree) {
-        TreeItem<String> root = new TreeItem<>("My Subjects");
+        TreeItem<String> root = new TreeItem<>("My Subjects" );
         tree.setRoot(root);
         Tree newTree = Tree.fromSend(textTree);
         addItemsToTreeView(root, newTree.items, 1);
@@ -60,6 +61,13 @@ public class StudentMainController {
                     @Override
                     public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> t1) {
                         System.out.println("Selected item: " + t1.getValue());
+                        String[] parts = t1.getValue().split(":");
+                        if (parts.length == 3) {
+                            if (parts[1].equals("3")) {
+                                serverThread.send("GT" + parts[2]);
+                                outputLabel.setText(parts[0]);
+                            }
+                        }
                     }
                 });
     }
@@ -67,7 +75,7 @@ public class StudentMainController {
 
     private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
         for (StringID item : items) {
-            TreeItem<String> newItem = new TreeItem<>(item.name);
+            TreeItem<String> newItem = new TreeItem<>(item.name+":"+depth+":"+item.id);
             String itemCode = depth + ":" + item.id;
             parentItem.getChildren().add(newItem);
             addItemsToTreeView(newItem, item.items, depth + 1);

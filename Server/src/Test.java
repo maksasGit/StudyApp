@@ -17,19 +17,6 @@ public class Test {
     }
 
 
-
-    public Test() {
-        this.testLabel = "Тестовый тест";
-        this.questions = new ArrayList<>(Arrays.asList(new Question(), new Question(), new Question(), new Question()));
-        this.testID = IDGenerate(6);
-    }
-
-    public Test(String testLabel) {
-        this.testLabel = testLabel;
-        this.questions = new ArrayList<>(Arrays.asList(new Question("abba"), new Question("labba"), new Question("dabba"), new Question("dooooooo")));
-        this.testID = IDGenerate(6);
-    }
-
     private String IDGenerate(int length){
         String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();

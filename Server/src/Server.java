@@ -78,14 +78,10 @@ public class Server {
 
 
     // sendTest
-//        public void sendTest(ClientThread receiver, String testID){
-//            Test test = storage.getTestbyID(testID);
-//            String testQuestions = "";
-//            for (Question question : test.shuffleQuestions()){
-//                testQuestions = testQuestions.concat(question.getQuestionText()+"::");
-//            }
-//            receiver.send("TQ"+testQuestions);
-//        }
+        public void sendTest(ClientThread receiver, String testID){
+            String testQuestions = storage.getTestByID(testID);
+            receiver.send("ST"+testQuestions);
+        }
 
 
     //###############################################################################

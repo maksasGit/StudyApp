@@ -100,4 +100,29 @@ public class Storage {
         return tests;
     }
 
+
+    public String getTestByID(String testID) {
+        StringBuilder testString = new StringBuilder();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT question, question_num FROM TestQuestion WHERE test_id = ?");
+            statement.setString(1, testID);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String question = resultSet.getString("question");
+                int questionNum = resultSet.getInt("question_num");
+                testString.append(question).append("***").append(questionNum).append("****");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve test questions from the database: " + e.getMessage());
+        }
+
+        return testString.toString();
+    }
+
+
 }
