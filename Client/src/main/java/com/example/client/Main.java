@@ -24,8 +24,8 @@ public class Main extends Application {
         serverThread.setDaemon(true);
         serverThread.start();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StudentMain.fxml"));
-        fxmlLoader.setControllerFactory(controllerClass -> new StudentMainController(serverThread, receiver));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("TeacherMain.fxml"));
+        fxmlLoader.setControllerFactory(controllerClass -> new TeacherMainController(serverThread, receiver));
 
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
         TextInputDialog dialog = new TextInputDialog();

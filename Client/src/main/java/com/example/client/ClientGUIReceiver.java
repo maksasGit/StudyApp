@@ -7,23 +7,28 @@ import java.util.List;
 
 public class ClientGUIReceiver {
 
-    StudentMainController controller = null;
+    StudentMainController studentController = null;
+
+    TeacherMainController teacherController = null;
+
+    AdminController adminController = null;
 
     public ClientGUIReceiver() {
     }
 
     public void setStudentMainController(StudentMainController controller) {
-        this.controller = controller;
+        this.studentController = controller;
     }
 
+    public void setTeacherController(TeacherMainController controller) {this.teacherController = controller;}
 
     public void getTree(String textTree){
-        this.controller.updateTreeView(textTree);
+        this.studentController.updateTreeView(textTree);
     }
 
     public void getTestQuestions(String testQuestions){
         // add if From Server get TryResult
-        this.controller.getTest(testQuestions);
+        this.studentController.getTest(testQuestions);
     }
 
 
