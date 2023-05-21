@@ -1,5 +1,7 @@
 package com.example.client;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -51,6 +53,15 @@ public class StudentMainController {
         tree.setRoot(root);
         Tree newTree = Tree.fromSend(textTree);
         addItemsToTreeView(root, newTree.items, 1);
+
+        tree.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(new ChangeListener<TreeItem<String>>() {
+                    @Override
+                    public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> t1) {
+                        System.out.println("Selected item: " + t1.getValue());
+                    }
+                });
     }
 
 
@@ -58,15 +69,9 @@ public class StudentMainController {
         for (StringID item : items) {
             TreeItem<String> newItem = new TreeItem<>(item.name);
             String itemCode = depth + ":" + item.id;
-
             parentItem.getChildren().add(newItem);
             addItemsToTreeView(newItem, item.items, depth + 1);
 
-            newItem.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    System.out.println(itemCode);
-                }
-            });
         }
     }
 
