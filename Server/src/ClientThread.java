@@ -24,15 +24,16 @@ public class ClientThread extends Thread {
             writer = new PrintWriter(output, true);
             String message;
             while ((message = reader.readLine()) != null){
-                String prefix = message.substring(0,2);
-                String postfix = message.substring(2);
+                String prefix = message.substring(0,5);
+                String postfix = message.substring(5);
                 System.out.println("Server received: " +message);
                 switch(prefix) {
-                    case "LO" -> login(postfix);
-                    case "TR" -> server.sendSubjectTopicTestTree(this);
-                    case "GT" -> server.sendTest(this,postfix);
-                    case "TT" -> server.getTry(this,postfix);
-                    case "GR" -> server.sendTry(this,postfix);
+                    case "LOGIN" -> login(postfix);
+                    case "STTT_" -> server.sendSubjectTopicTestTree(this);
+                    case "GTEST" -> server.sendTest(this,postfix);
+                    case "GTRY_" -> server.getTry(this,postfix);
+                    case "STRY_" -> server.sendTry(this,postfix);
+                    case "STRYR" -> server.getResult(this,postfix);
                 }
             }
             server.removeClient(this);

@@ -125,7 +125,7 @@ public class StudentMainController {
 
 
     public void initialize(){
-        serverThread.send("TR");
+        serverThread.send("STTT_");
     }
 
     public void closeWindow(){

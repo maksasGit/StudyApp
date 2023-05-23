@@ -74,7 +74,7 @@ public class ServerThread extends Thread {
     }
 
     public void login(String name) {
-        this.writer.println("LO" + name);
+        this.writer.println("LOGIN" + name);
     }
 
     public void getTestInfo(String testID){

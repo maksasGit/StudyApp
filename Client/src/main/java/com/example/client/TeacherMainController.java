@@ -41,10 +41,13 @@ public class TeacherMainController {
     private TextField textArea;
     @FXML
     private TextArea outputArea;
+    @FXML
+    private Button confirm;
 
 
     private CustomTreeItem<String> selectedItem;
     private CustomTreeItem<String> previousSelectedItem;
+
 
 
 
@@ -69,11 +72,22 @@ public class TeacherMainController {
         MenuItem updateMenuItem = new MenuItem("Update");
         updateMenuItem.setOnAction(event -> {
             if (selectedItem != null && selectedItem != root) {
-                // Prompt the user to enter the new name for the selected item
-                TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
-                dialog.setTitle("Update item");
-                dialog.setHeaderText("Enter the new name for the item:");
-                dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
+                // for test show on output box, else show in dialog box
+                if (!selectedItem.getType().equals("Test")) {
+                    // Prompt the user to enter the new name for the selected item
+                    TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
+                    dialog.setTitle("Update item");
+                    dialog.setHeaderText("Enter the new name for the item:");
+                    dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
+                } else {
+                    outputArea.clear();
+                    textArea.clear();
+                    confirm.setVisible(true);
+                    outputLabel.setText(selectedItem.getValue());
+                    outputArea.setVisible(true);
+                    send.setVisible(true);
+                    textArea.setVisible(true);
+                }
             }
         });
 
@@ -119,7 +133,7 @@ public class TeacherMainController {
                 CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
                 System.out.println("Selected item: " + selectedItem.getValue());
                 if (selectedItem.getType().equals("Try")){
-                    serverThread.send("GR"+selectedItem.getAdditionalValue());
+                        serverThread.send("STRY_"+selectedItem.getAdditionalValue());
                 }
             }
         });
@@ -143,7 +157,11 @@ public class TeacherMainController {
 
 
     public void initialize(){
-        serverThread.send("TR");
+        serverThread.send("STTT_");
+        outputArea.setVisible(false);
+        textArea.setVisible(false);
+        send.setVisible(false);
+        confirm.setVisible(false);
     }
 
 
@@ -153,12 +171,16 @@ public class TeacherMainController {
 
 
     public void showStudentTry(String textTry) {
+        outputArea.setVisible(true);
+        textArea.setVisible(true);
+        textArea.clear();
+        send.setVisible(true);
+        confirm.setVisible(false);
         String[] parts = textTry.split("::");
         Platform.runLater(() -> {
             outputLabel.setText(parts[2] + " - " + parts[1]);
             outputArea.clear();
             for (int i = 3; i < ((parts.length - 3) / 2)  + 3; i++) {
-                System.out.println(i + " " + (i + (parts.length - 3) / 2 ));
                 outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 3) / 2] + "\n\n\n");
             }
         });
@@ -167,6 +189,14 @@ public class TeacherMainController {
 
 
     public void setTryResult(){
+        if (!textArea.getText().isEmpty()) {
+            outputArea.setVisible(false);
+            textArea.setVisible(false);
+            outputLabel.setText("Choose something");
+            serverThread.send("STRYR" + textArea.getText());
+            textArea.clear();
+        }
+
     }
 
     //#####################################################################
