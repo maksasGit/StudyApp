@@ -29,19 +29,25 @@ public class Storage {
         Tree tree = new Tree();
         try {
             // Retrieve subjects
-            List<StringID> subjects = getSubjects();
+            List<CustomString> subjects = getSubjects();
             tree.items.addAll(subjects);
 
             // Retrieve topics for each subject
-            for (StringID subject : subjects) {
-                List<StringID> topics = getTopicsForSubject(subject.id);
+            for (CustomString subject : subjects) {
+                List<CustomString> topics = getTopicsForSubject(subject.id);
                 subject.items.addAll(topics);
 
                 // Retrieve tests for each topic
-                for (StringID topic : topics) {
-                    List<StringID> tests = getTestsForTopic(topic.id);
+                for (CustomString topic : topics) {
+                    List<CustomString> tests = getTestsForTopic(topic.id);
                     topic.items.addAll(tests);
+
+                    for (CustomString test: tests){
+                        List<CustomString> trys = getTrysFroTest(test.id);
+                        test.items.addAll(trys);
+                    }
                 }
+
             }
         } catch (SQLException e) {
             System.out.println("Failed to retrieve tree data from the database: " + e.getMessage());
@@ -50,22 +56,22 @@ public class Storage {
         return tree.toSend();
     }
 
-    private List<StringID> getSubjects() throws SQLException {
-        List<StringID> subjects = new ArrayList<>();
+    private List<CustomString> getSubjects() throws SQLException {
+        List<CustomString> subjects = new ArrayList<>();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT subject_id, subject_name FROM Subject");
         while (resultSet.next()) {
             int id = resultSet.getInt("subject_id");
             String name = resultSet.getString("subject_name");
-            subjects.add(new StringID(name, id));
+            subjects.add(new CustomString(name, id));
         }
         resultSet.close();
         statement.close();
         return subjects;
     }
 
-    private List<StringID> getTopicsForSubject(int subjectId) throws SQLException {
-        List<StringID> topics = new ArrayList<>();
+    private List<CustomString> getTopicsForSubject(int subjectId) throws SQLException {
+        List<CustomString> topics = new ArrayList<>();
         PreparedStatement statement = connection.prepareStatement("SELECT Topic.topic_id, Topic.topic_name " +
                 "FROM Topic " +
                 "INNER JOIN SubjectTopic ON Topic.topic_id = SubjectTopic.topic_id " +
@@ -75,15 +81,15 @@ public class Storage {
         while (resultSet.next()) {
             int id = resultSet.getInt("topic_id");
             String name = resultSet.getString("topic_name");
-            topics.add(new StringID(name, id));
+            topics.add(new CustomString(name, id));
         }
         resultSet.close();
         statement.close();
         return topics;
     }
 
-    private List<StringID> getTestsForTopic(int topicId) throws SQLException {
-        List<StringID> tests = new ArrayList<>();
+    private List<CustomString> getTestsForTopic(int topicId) throws SQLException {
+        List<CustomString> tests = new ArrayList<>();
         PreparedStatement statement = connection.prepareStatement("SELECT Test.test_id, Test.test_name " +
                 "FROM Test " +
                 "INNER JOIN TopicTest ON Test.test_id = TopicTest.test_id " +
@@ -93,11 +99,29 @@ public class Storage {
         while (resultSet.next()) {
             int id = resultSet.getInt("test_id");
             String name = resultSet.getString("test_name");
-            tests.add(new StringID(name, id));
+            tests.add(new CustomString(name, id));
         }
         resultSet.close();
         statement.close();
         return tests;
+    }
+
+    private List<CustomString> getTrysFroTest(int testId) throws SQLException{
+        List<CustomString> trys = new ArrayList<>();
+        PreparedStatement statement = connection.prepareStatement("SELECT Try.try_id, User.login AS User_name " +
+                "FROM Try " +
+                "JOIN User ON Try.user_id = User.user_id WHERE Try.test_id = ?");
+        statement.setInt(1, testId);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("try_id");
+            String name = resultSet.getString("User_name");
+            trys.add(new CustomString(name, id));
+        }
+        resultSet.close();
+        statement.close();
+        return trys;
+
     }
 
 

@@ -3,11 +3,17 @@ package com.example.client;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TeacherMainController {
 
@@ -40,30 +46,91 @@ public class TeacherMainController {
     private TextArea outputArea;
 
 
+    private CustomTreeItem<String> selectedItem;
+    private CustomTreeItem<String> previousSelectedItem;
+
+
+
     public void updateTreeView(String textTree) {
-        TreeItem<String> root = new TreeItem<>("My Subjects" );
+        CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else" , "0");
         tree.setRoot(root);
         Tree newTree = Tree.fromSend(textTree);
         addItemsToTreeView(root, newTree.items, 1);
+//####################################################################################
+        ContextMenu contextMenuSubjectTopic = new ContextMenu();
+        MenuItem addMenuItem = new MenuItem("Add new");
+        addMenuItem.setOnAction(event -> {
+            // Prompt the user to enter the name of the new item
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Add new item");
+            dialog.setHeaderText("Enter the name of the new item:");
+            dialog.showAndWait().ifPresent(name -> {
+                CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
+                selectedItem.getChildren().add(newItem);
+            });
+        });
 
-        tree.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(new ChangeListener<TreeItem<String>>() {
-                    @Override
-                    public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> t1) {
-                        System.out.println("Selected item: " + t1.getValue());
-                    }
-                });
+        MenuItem updateMenuItem = new MenuItem("Update");
+        updateMenuItem.setOnAction(event -> {
+            if (selectedItem != null && selectedItem != root) {
+                // Prompt the user to enter the new name for the selected item
+                TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
+                dialog.setTitle("Update item");
+                dialog.setHeaderText("Enter the new name for the item:");
+                dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
+            }
+        });
+
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.setOnAction(event -> {
+            if (selectedItem != null && selectedItem != root) {
+                selectedItem.getParent().getChildren().remove(selectedItem);
+            }
+        });
+
+        contextMenuSubjectTopic.getItems().addAll(addMenuItem, updateMenuItem, deleteMenuItem);
+
+        //##################################################################
+
+        tree.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                previousSelectedItem = selectedItem;
+                selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
+                System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
+                if (selectedItem.getType().equals("Test")) {
+                    System.out.println("Test");
+                    contextMenuSubjectTopic.getItems().clear();
+                    contextMenuSubjectTopic.getItems().addAll(updateMenuItem , deleteMenuItem);
+                } else if (selectedItem.getType().equals("Try")) {
+                    contextMenuSubjectTopic.getItems().clear();
+                } else {
+                    contextMenuSubjectTopic.getItems().clear();
+                    contextMenuSubjectTopic.getItems().addAll(addMenuItem , updateMenuItem , deleteMenuItem);
+                }
+                if (selectedItem != null && previousSelectedItem != selectedItem) {
+                    contextMenuSubjectTopic.show(tree, event.getScreenX(), event.getScreenY());
+                } else {
+                    contextMenuSubjectTopic.hide();
+                }
+            }
+        });
     }
 
-    private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
+    private void addItemsToTreeView(CustomTreeItem<String> parentItem, List<StringID> items, int depth) {
+        Map<Integer, String> types = new HashMap<>();
+        types.put(1,"Subject");
+        types.put(2,"Topic");
+        types.put(3,"Test");
+        types.put(4,"Try");
         for (StringID item : items) {
-            TreeItem<String> newItem = new TreeItem<>(item.name+":"+depth+":"+item.id);
-            String itemCode = depth + ":" + item.id;
+            String itemCode = String.valueOf(item.id);
+            String itemType = types.get(depth);
+            CustomTreeItem<String> newItem = new CustomTreeItem<>(item.name , itemType , itemCode);
             parentItem.getChildren().add(newItem);
             addItemsToTreeView(newItem, item.items, depth + 1);
         }
     }
+
 
 
     public void initialize(){
@@ -133,3 +200,35 @@ public class TeacherMainController {
     }
 
 }
+
+class CustomTreeItem<String> extends TreeItem<String> {
+    private String additionalValue;
+    private String type;
+
+    public CustomTreeItem(String value) {
+        super(value);
+    }
+
+    public CustomTreeItem(String value, String type,  String additionalValue){
+        super(value);
+        this.type = type;
+        this.additionalValue = additionalValue;
+    }
+
+    public String getAdditionalValue() {
+        return additionalValue;
+    }
+
+    public void setAdditionalValue(String additionalValue) {
+        this.additionalValue = additionalValue;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}
+
