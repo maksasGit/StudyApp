@@ -148,5 +148,110 @@ public class Storage {
         return testString.toString();
     }
 
+    public String getTryById(String tryId) {
+        StringBuilder getTry = new StringBuilder();
+
+        // Retrieve test information
+        String testInfo = getTestInfo(tryId);
+        getTry.append(testInfo).append("::");
+
+        // Retrieve user information
+        String userInfo = getUserInfo(tryId);
+        getTry.append(userInfo).append("::");
+
+
+        // Get questions for it test
+        String questions = getTestByID(testInfo.split("::")[0]);
+        String textQuestions = "";
+        String[] questionParts = questions.split("##");
+        for (String questionPart : questionParts){
+            String[] parts = questionPart.split("\\*\\*");
+            textQuestions = textQuestions.concat(parts[0] + "::");
+        }
+        getTry.append(textQuestions);
+
+        // Retrieve answers
+        String answers = getAnswers(tryId);
+        getTry.append(answers);
+
+        return getTry.toString();
+    }
+
+    private String getTestInfo(String tryId) {
+        StringBuilder testInfo = new StringBuilder();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT Test.test_id, Test.test_name " +
+                    "FROM Try " +
+                    "JOIN Test ON Try.test_id = Test.test_id " +
+                    "WHERE Try.try_id = ?");
+            statement.setString(1, tryId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int testId = resultSet.getInt("test_id");
+                String testName = resultSet.getString("test_name");
+                testInfo.append(testId)
+                        .append("::")
+                        .append(testName);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve test information from the database: " + e.getMessage());
+        }
+
+        return testInfo.toString();
+    }
+
+    private String getUserInfo(String tryId) {
+        StringBuilder userInfo = new StringBuilder();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT User.login " +
+                    "FROM Try " +
+                    "JOIN User ON Try.user_id = User.user_id " +
+                    "WHERE Try.try_id = ?");
+            statement.setString(1, tryId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String userLogin = resultSet.getString("login");
+                userInfo.append(userLogin);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve user information from the database: " + e.getMessage());
+        }
+
+        return userInfo.toString();
+    }
+
+    private String getAnswers(String tryId) {
+        StringBuilder answers = new StringBuilder();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT answer_num, answer " +
+                    "FROM TryAnswer " +
+                    "WHERE try_id = ? " +
+                    "ORDER BY answer_num");
+            statement.setString(1, tryId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int answerNum = resultSet.getInt("answer_num");
+                String answer = resultSet.getString("answer");
+                answers.append(answer).append("::");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve answers from the database: " + e.getMessage());
+        }
+
+        return answers.toString();
+    }
+
+
 
 }

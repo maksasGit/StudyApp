@@ -36,5 +36,9 @@ public class ClientGUIReceiver {
         this.studentController.getTest(testQuestions);
     }
 
+    public void getTry(String textTry){
+        this.teacherController.showStudentTry(textTry);
+    }
+
 
 }

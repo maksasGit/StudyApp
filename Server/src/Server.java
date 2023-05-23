@@ -142,9 +142,9 @@ public class Server {
         }
 
     // sendTry
-        public void sendTry(ClientThread receiver){
-            // getTry as big TXT : que - ans
-            receiver.send("TR");
+        public void sendTry(ClientThread receiver, String tryId){
+            String sendTry = storage.getTryById(tryId);
+            receiver.send("SR"+sendTry);
         }
 
     // sendTryList

@@ -1,14 +1,11 @@
 package com.example.client;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
@@ -60,7 +57,6 @@ public class TeacherMainController {
         ContextMenu contextMenuSubjectTopic = new ContextMenu();
         MenuItem addMenuItem = new MenuItem("Add new");
         addMenuItem.setOnAction(event -> {
-            // Prompt the user to enter the name of the new item
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Add new item");
             dialog.setHeaderText("Enter the name of the new item:");
@@ -97,6 +93,9 @@ public class TeacherMainController {
                 previousSelectedItem = selectedItem;
                 selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
                 System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
+
+
+                // For each item correct Context Menu Test(updata, delete) , Try() , Else(Add,Update,Delete)
                 if (selectedItem.getType().equals("Test")) {
                     System.out.println("Test");
                     contextMenuSubjectTopic.getItems().clear();
@@ -107,10 +106,20 @@ public class TeacherMainController {
                     contextMenuSubjectTopic.getItems().clear();
                     contextMenuSubjectTopic.getItems().addAll(addMenuItem , updateMenuItem , deleteMenuItem);
                 }
+
+
+                // if new item selected then show , else hide
                 if (selectedItem != null && previousSelectedItem != selectedItem) {
                     contextMenuSubjectTopic.show(tree, event.getScreenX(), event.getScreenY());
                 } else {
                     contextMenuSubjectTopic.hide();
+                }
+            }
+            if (event.getClickCount() == 2) {
+                CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
+                System.out.println("Selected item: " + selectedItem.getValue());
+                if (selectedItem.getType().equals("Try")){
+                    serverThread.send("GR"+selectedItem.getAdditionalValue());
                 }
             }
         });
@@ -141,22 +150,30 @@ public class TeacherMainController {
 
     //#####################################################################
     //#########################STUDENTS__TRY###############################
-    public void showStudentTryList(){
-        
+
+
+    public void showStudentTry(String textTry) {
+        String[] parts = textTry.split("::");
+        Platform.runLater(() -> {
+            outputLabel.setText(parts[2] + " - " + parts[1]);
+            outputArea.clear();
+            for (int i = 3; i < ((parts.length - 3) / 2)  + 3; i++) {
+                System.out.println(i + " " + (i + (parts.length - 3) / 2 ));
+                outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 3) / 2] + "\n\n\n");
+            }
+        });
     }
 
-    public void showStudentTry(){
 
-    }
+
     public void setTryResult(){
     }
 
     //#####################################################################
     //#########################TEST_EDITOR#################################
-    public void showTestsList(){
-    }
 
     public void showTest(){
+
     }
 
     public void deleteTest(){
@@ -166,37 +183,30 @@ public class TeacherMainController {
     }
 
     public void createTest(){
-
     }
 
     //#####################################################################
     //#########################SUBJECT_EDITOR##############################
 
     public void updateSubject(){
-
     }
 
     public void deleteSubject(){
-
     }
 
     public void addSubject(){
-
     }
 
     //#####################################################################
     //#########################TOPIC_EDITOR##############################
 
     public void updateTopic(){
-
     }
 
     public void deleteTopic(){
-
     }
 
     public void addTopic(){
-
     }
 
 }
