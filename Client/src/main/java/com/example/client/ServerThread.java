@@ -81,4 +81,9 @@ public class ServerThread extends Thread {
     public void getTestInfo(String testID){
         this.writer.println("TI" + testID);
     }
+
+
+    public ClientGUIReceiver getReceiver(){
+        return this.receiver;
+    }
 }

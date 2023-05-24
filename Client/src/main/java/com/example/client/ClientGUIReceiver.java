@@ -26,6 +26,8 @@ public class ClientGUIReceiver {
 
     public void setLogInController(LogInController controller) {this.logInController = controller;}
 
+    public void setAdminController(AdminController controller) {this.adminController = controller;}
+
     public void getTree(String textTree){
         if (studentController == null) {
             this.teacherController.updateTreeView(textTree);

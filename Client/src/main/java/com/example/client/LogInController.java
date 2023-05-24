@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,14 +20,15 @@ public class LogInController {
 
     @FXML
     private AnchorPane root;
+
     @FXML
     private PasswordField passwordField;
 
     @FXML
     private Button LogInButton;
 
-    ServerThread serverThread;
-    ClientGUIReceiver receiver;
+    private ServerThread serverThread;
+    private ClientGUIReceiver receiver;
 
     public LogInController(ServerThread serverThread, ClientGUIReceiver receiver) {
         this.serverThread = serverThread;
@@ -36,78 +36,64 @@ public class LogInController {
         this.receiver.setLogInController(this);
     }
 
-    private String username = null;
-
     @FXML
     private void handleLoginButton() {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        this.username = username;
         serverThread.send("LOGIN" + username + ":" + password);
         usernameField.clear();
         passwordField.clear();
     }
 
-    public void handleLoginAsk(String answer){
+    public void handleLoginAsk(String answer) {
         String[] answerParts = answer.split(":");
         if (answerParts[0].equals("OK")) {
-            if (answerParts[1].equals("student")){
-                Platform.runLater(() -> {
-                    FXMLLoader fxmlLoader = new FXMLLoader(LogInController.class.getResource("StudentMain.fxml"));
-                    fxmlLoader.setControllerFactory(controllerClass -> new StudentMainController(serverThread, receiver));
-                    Parent root;
-                    try {
-                        root = fxmlLoader.load();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to load StudentMain.fxml: " + e.getMessage(), e);
-                    }
+            String fxmlFile;
+            switch (answerParts[1]) {
+                case "student":
+                    fxmlFile = "StudentMain.fxml";
+                    break;
+                case "teacher":
+                    fxmlFile = "TeacherMain.fxml";
+                    break;
+                case "admin":
+                    fxmlFile = "Admin.fxml";
+                    break;
+                default:
+                    return;
+            }
 
-                    Stage studentMainStage = new Stage();
-                    studentMainStage.setScene(new Scene(root, 800, 600));
-                    studentMainStage.setTitle("Client - " + username);
-                    studentMainStage.show();
+            String userType = answerParts[1];
+            String username = usernameField.getText();
+            Platform.runLater(() -> {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
+                fxmlLoader.setControllerFactory(controllerClass -> {
+                    if (userType.equals("student")) {
+                        return new StudentMainController(serverThread, receiver);
+                    } else if (userType.equals("teacher")) {
+                        return new TeacherMainController(serverThread, receiver);
+                    } else if (userType.equals("admin")) {
+                        return new AdminController(serverThread, receiver);
+                    }
+                    return null;
                 });
 
-            }
-            if (answerParts[1].equals("teacher")){
-                Platform.runLater(() -> {
-                    FXMLLoader fxmlLoader = new FXMLLoader(LogInController.class.getResource("TeacherMain.fxml"));
-                    fxmlLoader.setControllerFactory(controllerClass -> new TeacherMainController(serverThread, receiver));
-                    Parent root;
-                    try {
-                        root = fxmlLoader.load();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to load TeacherMain.fxml: " + e.getMessage(), e);
-                    }
-
-                    Stage teacherMainStage = new Stage();
-                    teacherMainStage.setScene(new Scene(root, 800, 600));
-                    teacherMainStage.setTitle("Client - " + username);
-                    teacherMainStage.show();
-                });
-
-            }
-            if (answerParts[1].equals("admin")){
-//                FXMLLoader fxmlLoader = new FXMLLoader(LogInController.class.getResource("StudentMain.fxml"));
-//                fxmlLoader.setControllerFactory(controllerClass -> new AdminController(serverThread, receiver));
-//                Parent root = null;
-//                try {
-//                    root = fxmlLoader.load();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                Stage studentMainStage = new Stage();
-//                studentMainStage.setScene(new Scene(root, 900, 800));
-//                studentMainStage.setTitle("Client - " + username);
-//                studentMainStage.show();
-            }
+                try {
+                    Parent root = fxmlLoader.load();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root, 800, 600));
+                    stage.setTitle("Client - " + username);
+                    stage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to load " + fxmlFile + ": " + e.getMessage(), e);
+                }
+            });
         }
+
         Platform.runLater(() -> {
             Stage mainStage = (Stage) root.getScene().getWindow();
             mainStage.close();
         });
-
     }
 
 }
