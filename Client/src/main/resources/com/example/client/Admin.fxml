@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.client.Admin"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Create">
+               <items>
+                  <Menu mnemonicParsing="false" text="Create user">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Create Student" />
+                        <MenuItem mnemonicParsing="false" text="Create Teacher" />
+                     </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" text="Create Group" />
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                  <Menu mnemonicParsing="false" text="Edit User">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Change teacher login or password" />
+                        <MenuItem mnemonicParsing="false" text="Change student login or password" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Edit Group">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Edit Group Name" />
+                        <MenuItem mnemonicParsing="false" text="Add subject to group" />
+                        <MenuItem mnemonicParsing="false" text="Remove subject from group" />
+                        <MenuItem mnemonicParsing="false" text="Add student to group" />
+                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                    </items>
+                  </Menu>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox prefHeight="370.0" prefWidth="600.0" />
+   </children>
+</VBox>
