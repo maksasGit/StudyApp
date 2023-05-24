@@ -25,7 +25,7 @@ public class Main extends Application {
         serverThread.start();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LogIn.fxml"));
         fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, receiver));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 250);
+        Scene scene = new Scene(fxmlLoader.load(), 300, 200);
         stage.setScene(scene);
         stage.show();
 
