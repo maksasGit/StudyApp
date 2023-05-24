@@ -23,25 +23,11 @@ public class Main extends Application {
         serverThread.setReceiver(receiver);
         serverThread.setDaemon(true);
         serverThread.start();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("TeacherMain.fxml"));
-        fxmlLoader.setControllerFactory(controllerClass -> new TeacherMainController(serverThread, receiver));
-
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Login");
-        dialog.setHeaderText("Login");
-        dialog.setContentText("Please enter your name:");
-
-        Optional<String> result = dialog.showAndWait();
-        String login = null;
-        if (result.isPresent())  {
-            login = result.get();
-            serverThread.login(login);
-            stage.setTitle("Chat - " + login);
-            stage.setScene(scene);
-            stage.show();
-        }
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LogIn.fxml"));
+        fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, receiver));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 250);
+        stage.setScene(scene);
+        stage.show();
 
     }
 

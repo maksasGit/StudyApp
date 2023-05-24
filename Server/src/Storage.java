@@ -148,6 +148,31 @@ public class Storage {
         return testString.toString();
     }
 
+
+    public String checkLogin(String username, String password) {
+        String answer = "NEOK";
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT User.user_id, User_type.user_type " +
+                    "FROM User " +
+                    "JOIN User_type ON User.user_type_id = User_type.user_type_id " +
+                    "WHERE User.login = ? AND User.password = ?");
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String userType = resultSet.getString("user_type");
+                answer = "OK:" + userType;
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve test information from the database: " + e.getMessage());
+        }
+        return answer;
+    }
+
+
+
     public String getTryById(String tryId) {
         StringBuilder getTry = new StringBuilder();
 

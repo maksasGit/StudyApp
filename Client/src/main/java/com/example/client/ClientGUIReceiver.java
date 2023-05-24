@@ -13,6 +13,8 @@ public class ClientGUIReceiver {
 
     AdminController adminController = null;
 
+    LogInController logInController = null;
+
     public ClientGUIReceiver() {
     }
 
@@ -21,6 +23,8 @@ public class ClientGUIReceiver {
     }
 
     public void setTeacherController(TeacherMainController controller) {this.teacherController = controller;}
+
+    public void setLogInController(LogInController controller) {this.logInController = controller;}
 
     public void getTree(String textTree){
         if (studentController == null) {
@@ -40,5 +44,9 @@ public class ClientGUIReceiver {
         this.teacherController.showStudentTry(textTry);
     }
 
+
+    public void getAnswer(String answer){
+        this.logInController.handleLoginAsk(answer);
+    }
 
 }

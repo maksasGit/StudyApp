@@ -64,6 +64,17 @@ public class Server {
     }
 
 
+    // login
+
+    public void login(ClientThread receiver, String info){
+        System.out.println("get login" + info);
+        String[] parts = info.split(":");
+        String answer = storage.checkLogin(parts[0] , parts[1]);
+        System.out.println("get answer" + answer);
+        receiver.send("Lo" + answer);
+    }
+
+
     //#################################################################################
     //############################STUDENT##############################################
 
