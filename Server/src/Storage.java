@@ -541,9 +541,9 @@ public class Storage {
             }
 
             // Delete the topic
-            String deleteTopicQuery = "DELETE FROM Topiс WHERE topic_id = ?";
+            String deleteTopicQuery = "DELETE FROM Topic WHERE topic_id = ?";
             PreparedStatement deleteTopicStatement = connection.prepareStatement(deleteTopicQuery);
-            deleteTopicStatement.setString(1, topicId);
+            deleteTopicStatement.setInt(1, Integer.parseInt(topicId));
             deleteTopicStatement.executeUpdate();
 
             System.out.println("Topic and associated tests deleted successfully.");

@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <HBox fx:id="mainWindow" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.TeacherMainController">
 
@@ -15,18 +16,21 @@
 
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="550.0" style="-fx-background-color: #F2F2F2;">
          <children>
-            <Label fx:id="outputLabel" alignment="CENTER" prefHeight="50.0" prefWidth="350.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Choose something" textAlignment="CENTER">
+            <Label fx:id="outputLabel" alignment="CENTER" prefHeight="25.0" prefWidth="300.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Choose something" textAlignment="CENTER">
                <VBox.margin>
                   <Insets bottom="15.0" />
-               </VBox.margin></Label>
+               </VBox.margin>
+               <font>
+                  <Font size="8.0" />
+               </font></Label>
 
-            <TextArea fx:id="outputArea" prefHeight="450.0" prefWidth="420.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" wrapText="true" />
+            <TextArea fx:id="outputArea" prefHeight="399.0" prefWidth="550.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" wrapText="true" />
 
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" spacing="10">
                <children>
                   <TextField fx:id="textArea" prefHeight="31.0" prefWidth="250.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" />
                   <Button fx:id="send" onAction="#setTryResult" style="-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white;" text="Send" />
-                  <Button fx:id="confirm" mnemonicParsing="false" text="Confirm" />
+                  <Button fx:id="confirm" mnemonicParsing="false" onAction="#onConfirmAction" text="Confirm" />
                </children>
             </HBox>
          </children>

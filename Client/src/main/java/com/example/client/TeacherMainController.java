@@ -52,20 +52,36 @@ public class TeacherMainController {
 
             MenuItem addMenuItem = new MenuItem("Добавить");
             addMenuItem.setOnAction(event -> {
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Add new item");
-                dialog.setHeaderText("Enter the name of the new item:");
-                dialog.showAndWait().ifPresent(name -> {
-                    CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
-                    if (selectedItem.getType().equals("Else")) {
-                        serverThread.send("Nsubj" + newItem.getValue());
-                        clearTree();
-                    }
-                    if (selectedItem.getType().equals("Subject")) {
-                        serverThread.send("Ntopi" + selectedItem.getAdditionalValue() + "::" + newItem.getValue());
-                        clearTree();
-                    }
-                });
+                if (selectedItem.getType().equals("Topic")) {
+                    outputArea.clear();
+                    textArea.clear();
+                    confirm.setVisible(true);
+                    outputLabel.setText("EnterTestName");
+                    outputArea.setVisible(true);
+                    send.setVisible(false);
+                    textArea.setVisible(false);
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Add new item");
+                    dialog.setHeaderText("Enter the name of the new item:");
+                    dialog.showAndWait().ifPresent(name -> {
+                        outputLabel.setText(name);
+                    });
+                } else {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Add new item");
+                    dialog.setHeaderText("Enter the name of the new item:");
+                    dialog.showAndWait().ifPresent(name -> {
+                        CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
+                        if (selectedItem.getType().equals("Else")) {
+                            serverThread.send("Nsubj" + newItem.getValue());
+                            clearTree();
+                        }
+                        if (selectedItem.getType().equals("Subject")) {
+                            serverThread.send("Ntopi" + selectedItem.getAdditionalValue() + "::" + newItem.getValue());
+                            clearTree();
+                        }
+                    });
+                }
             });
 
             MenuItem updateMenuItem = new MenuItem("Изменить");
@@ -226,6 +242,21 @@ public class TeacherMainController {
     }
 
     public void createTest(){
+    }
+
+    public void onConfirmAction(){
+        String[] questions = outputArea.getText().split("\n");
+        String questionText = "";
+        for (String question : questions){
+            questionText = questionText.concat("**" + question);
+        }
+        serverThread.send("Ntest" + selectedItem.getAdditionalValue() + "**" + outputLabel.getText() + questionText);
+        clearTree();
+        outputArea.setVisible(false);
+        textArea.setVisible(false);
+        outputLabel.setText("Choose something");
+        send.setVisible(false);
+        confirm.setVisible(false);
     }
 
     //#####################################################################
