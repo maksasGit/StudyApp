@@ -75,6 +75,7 @@ public class StudentMainController {
 
     public void getTest(String testQuestions) {
         sendButton.setDisable(false);
+        currentTry.clear();
         String[] questionsFromText = testQuestions.split("##");
         for (String questionFromText : questionsFromText) {
             String[] questionPart = questionFromText.split("\\*\\*");
@@ -101,9 +102,11 @@ public class StudentMainController {
     }
 
     public void setAnswer() {
-        currentTry.setAnswer(answerTextField.getText());
-        answerTextField.clear();
-        showNextQuestion();
+        if (!answerTextField.getText().isEmpty()) {
+            currentTry.setAnswer(answerTextField.getText());
+            answerTextField.clear();
+            showNextQuestion();
+        }
     }
 
     public void initialize() {

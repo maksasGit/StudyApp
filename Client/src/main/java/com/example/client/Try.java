@@ -46,6 +46,11 @@ public class Try {
     public void shuffleQuestions(){
         Collections.shuffle(questions);
     }
+
+    public void clear() {
+        questions.clear();
+        currentQuestion=0;
+    }
 }
 
 class Question{

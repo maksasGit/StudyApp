@@ -93,10 +93,8 @@ public class TeacherMainController {
 
         tree.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
-                previousSelectedItem = selectedItem;
                 selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
                 System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
-
 
                 // For each item correct Context Menu Test(updata, delete) , Try() , Else(Add,Update,Delete)
                 if (selectedItem.getType().equals("Test")) {
@@ -110,9 +108,7 @@ public class TeacherMainController {
                     contextMenuSubjectTopic.getItems().addAll(addMenuItem , updateMenuItem , deleteMenuItem);
                 }
 
-
-                // if new item selected then show , else hide
-                if (selectedItem != null && previousSelectedItem != selectedItem) {
+                if (selectedItem != null) {
                     contextMenuSubjectTopic.show(tree, event.getScreenX(), event.getScreenY());
                 } else {
                     contextMenuSubjectTopic.hide();
@@ -120,7 +116,7 @@ public class TeacherMainController {
             }
             if (event.getClickCount() == 2) {
                 CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
-                System.out.println("Selected item: " + selectedItem.getValue());
+                System.out.println("Selected item: " + selectedItem.getValue()  + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
                 if (selectedItem.getType().equals("Try")){
                         serverThread.send("STRY_"+selectedItem.getAdditionalValue());
                 }
