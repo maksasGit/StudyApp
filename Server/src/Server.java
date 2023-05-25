@@ -128,11 +128,6 @@ public class Server {
         receiver.send("TR" + result);
     }
 
-    // getSubject
-
-        public void getSubject(ClientThread sender, String newSubject){
-            // storage.addSubject(newSubject)
-        }
 
     //getUpdateSubject
 
@@ -147,10 +142,6 @@ public class Server {
             // storage.deleteSubject(subjectId)
         }
 
-    // getTopic
-        public void getTopic(ClientThread sender, String newTopic){
-            // storage.addTopic(newTopic)
-        }
 
     //getUpdateTopic
 
@@ -164,35 +155,25 @@ public class Server {
             // storage.deleteTopic(topicId)
         }
 
-    // getTest
+        // getNewTest
 
-        public void getTest(ClientThread sender, String newTest){
-            // storage.addTest(newTest)
-        }
-
-    // getUpdateTest
-
-        public void getUpdateTest(ClientThread sender, String updateTest){
-            // storage.updateTest(testId, updateTest)
+        public void getNewTest(ClientThread sender, String newTestText){
+            String[] mainParts = newTestText.split("\\*\\*");
+            String testName = mainParts[0];
+            List<String> questions = new ArrayList<>();
+            for (int i = 1; i < mainParts.length; i++){
+                questions.add(mainParts[i]);
+            }
+            storage.addNewTest(testName , questions);
         }
 
     // getDeleteTest
 
-        public void getDeleteTest(ClientThread sender, String deleteTest){
-            // storage.deleteTest(testID)
+        public void getDeleteTest(ClientThread sender, String testID){
+            storage.deleteTest(testID);
         }
 
-    // sendTry
-        public void sendTry(ClientThread receiver, String tryId){
-            String sendTry = storage.getTryById(tryId);
-            receiver.send("SR"+sendTry);
-        }
 
-    // sendTryList
-        public void sendTryList(ClientThread receiver){
-            // getallTry and just user_name and try_id
-            receiver.send("TL");
-        }
 
     // getResult
         public void getResult(ClientThread sender, String result){
@@ -201,19 +182,7 @@ public class Server {
              storage.setTryResult(tryId, newResult);
         }
 
-    // getUpdateResult
-        public void getUpdateResult(ClientThread sender, String updateResult){
-            // int tryId = result
-            // int updateResult = result
-            // storage.updateTryResult(tryID,updateResult)
-        }
 
-    // getDeleteResult
-
-        public void getDeleteResult(ClientThread sender, String deleteTest){
-            // int tryId = deleteTest
-            //storage.deletetryResult(tryId)
-        }
 
     //###############################################################################
     //############################ADMIN##############################################

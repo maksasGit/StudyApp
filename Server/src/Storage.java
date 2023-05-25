@@ -454,4 +454,70 @@ public class Storage {
         }
     }
 
+    public void addNewTest(String testName, List<String> questions) {
+        try {
+            // Insert the new test into the 'Test' table
+            String insertTestQuery = "INSERT INTO Test (test_name) VALUES (?)";
+            PreparedStatement insertTestStatement = connection.prepareStatement(insertTestQuery, Statement.RETURN_GENERATED_KEYS);
+            insertTestStatement.setString(1, testName);
+            insertTestStatement.executeUpdate();
+
+            // Get the generated test ID
+            ResultSet generatedKeys = insertTestStatement.getGeneratedKeys();
+            int testId = -1;
+            if (generatedKeys.next()) {
+                testId = generatedKeys.getInt(1);
+            }
+
+            // Insert questions into the 'TestQuestion' table
+            String insertQuestionQuery = "INSERT INTO TestQuestion (test_id, question, question_num) VALUES (?, ?, ?)";
+            PreparedStatement insertQuestionStatement = connection.prepareStatement(insertQuestionQuery);
+            for (int i = 0; i < questions.size(); i++) {
+                insertQuestionStatement.setInt(1, testId);
+                insertQuestionStatement.setString(2, questions.get(i));
+                insertQuestionStatement.setInt(3, i );
+                insertQuestionStatement.executeUpdate();
+            }
+
+            System.out.println("New test added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to add a new test.");
+        }
+    }
+
+    public void deleteTest(String testID) {
+        try {
+            // Delete records from the 'TryAnswer' table for the specified test ID
+            String deleteTryAnswerQuery = "DELETE FROM TryAnswer WHERE try_id IN " +
+                    "(SELECT try_id FROM Try WHERE test_id = ?)";
+            PreparedStatement deleteTryAnswerStatement = connection.prepareStatement(deleteTryAnswerQuery);
+            deleteTryAnswerStatement.setString(1, testID);
+            deleteTryAnswerStatement.executeUpdate();
+
+            // Delete records from the 'Try' table for the specified test ID
+            String deleteTryQuery = "DELETE FROM Try WHERE test_id = ?";
+            PreparedStatement deleteTryStatement = connection.prepareStatement(deleteTryQuery);
+            deleteTryStatement.setString(1, testID);
+            deleteTryStatement.executeUpdate();
+
+            // Delete records from the 'TestQuestion' table for the specified test ID
+            String deleteTestQuestionQuery = "DELETE FROM TestQuestion WHERE test_id = ?";
+            PreparedStatement deleteTestQuestionStatement = connection.prepareStatement(deleteTestQuestionQuery);
+            deleteTestQuestionStatement.setString(1, testID);
+            deleteTestQuestionStatement.executeUpdate();
+
+            // Delete the record from the 'Test' table for the specified test ID
+            String deleteTestQuery = "DELETE FROM Test WHERE test_id = ?";
+            PreparedStatement deleteTestStatement = connection.prepareStatement(deleteTestQuery);
+            deleteTestStatement.setString(1, testID);
+            deleteTestStatement.executeUpdate();
+
+            System.out.println("Test and related records deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to delete test and related records.");
+        }
+    }
+
 }

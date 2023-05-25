@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.StudentMainController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #49A6B8;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.StudentMainController">
     <children>
-        <TreeView fx:id="subjectTreeView" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-width: 1px;" />
-        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="456.0">
+        <TreeView fx:id="subjectTreeView" blendMode="SRC_ATOP" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: #49A6B8; -fx-border-color: #49A6B8; -fx-border-width: 1;">
+            <cursor>
+                <Cursor fx:constant="DEFAULT" />
+            </cursor></TreeView>
+        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="456.0" style="-fx-background-color: #49A6B8;">
             <children>
-                <Label fx:id="outputLabel" text="Label" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-                <TextArea fx:id="outputArea" prefHeight="272.0" prefWidth="353.0" style="-fx-font-size: 14px; -fx-background-color: #ffffff;" />
+                <Label fx:id="outputLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Окно студента" textFill="#c94c2d" />
+                <TextArea fx:id="outputArea" blendMode="SRC_ATOP" prefHeight="272.0" prefWidth="353.0" style="-fx-font-size: 14px; -fx-background-color: #E0D6CD;" />
                 <HBox alignment="CENTER" prefHeight="94.0" prefWidth="451.0">
                     <children>
                         <TextField fx:id="answerTextField" style="-fx-font-size: 14px; -fx-pref-width: 200px;" />
-                        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#setAnswer" text="Send" style="-fx-font-size: 14px; -fx-pref-width: 80px;" />
+                        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#setAnswer" style="-fx-font-size: 14px; -fx-pref-width: 90px; -fx-background-color: #E0D6CD;" text="Отправить" textFill="#b9300e" />
                     </children>
                 </HBox>
             </children>
