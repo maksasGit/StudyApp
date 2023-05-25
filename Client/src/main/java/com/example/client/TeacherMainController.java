@@ -41,87 +41,109 @@ public class TeacherMainController {
 
 
     public void updateTreeView(String textTree) {
-        CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else" , "0");
-        tree.setRoot(root);
-        Tree newTree = Tree.fromSend(textTree);
-        addItemsToTreeView(root, newTree.items, 1);
-//####################################################################################
-        ContextMenu contextMenuSubjectTopic = new ContextMenu();
-        MenuItem addMenuItem = new MenuItem("Add new");
-        addMenuItem.setOnAction(event -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Add new item");
-            dialog.setHeaderText("Enter the name of the new item:");
-            dialog.showAndWait().ifPresent(name -> {
-                CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
-                selectedItem.getChildren().add(newItem);
+        Platform.runLater(() -> {
+            CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else", "0");
+            tree.setRoot(root);
+            Tree newTree = Tree.fromSend(textTree);
+            addItemsToTreeView(root, newTree.items, 1);
+
+            // Context menu items
+            ContextMenu contextMenuSubjectTopic = new ContextMenu();
+
+            MenuItem addMenuItem = new MenuItem("Добавить");
+            addMenuItem.setOnAction(event -> {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Add new item");
+                dialog.setHeaderText("Enter the name of the new item:");
+                dialog.showAndWait().ifPresent(name -> {
+                    CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
+                    if (selectedItem.getType().equals("Else")) {
+                        serverThread.send("Nsubj" + newItem.getValue());
+                        clearTree();
+                    }
+                    if (selectedItem.getType().equals("Subject")) {
+                        serverThread.send("Ntopi" + selectedItem.getAdditionalValue() + "::" + newItem.getValue());
+                        clearTree();
+                    }
+                });
             });
-        });
 
-        MenuItem updateMenuItem = new MenuItem("Update");
-        updateMenuItem.setOnAction(event -> {
-            if (selectedItem != null && selectedItem != root) {
-                // for test show on output box, else show in dialog box
-                if (!selectedItem.getType().equals("Test")) {
-                    // Prompt the user to enter the new name for the selected item
-                    TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
-                    dialog.setTitle("Update item");
-                    dialog.setHeaderText("Enter the new name for the item:");
-                    dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
-                } else {
-                    outputArea.clear();
-                    textArea.clear();
-                    confirm.setVisible(true);
-                    outputLabel.setText(selectedItem.getValue());
-                    outputArea.setVisible(true);
-                    send.setVisible(true);
-                    textArea.setVisible(true);
+            MenuItem updateMenuItem = new MenuItem("Изменить");
+            updateMenuItem.setOnAction(event -> {
+                if (selectedItem != null && selectedItem != root) {
+                    if (!selectedItem.getType().equals("Test")) {
+                        TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
+                        dialog.setTitle("Update item");
+                        dialog.setHeaderText("Enter the new name for " + selectedItem.getType() + ": ");
+                        dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
+                        String newName = selectedItem.getValue();
+                        if (selectedItem.getType().equals("Subject")) {
+                            serverThread.send("Usubj" + selectedItem.getAdditionalValue() + "::" + newName);
+                        }
+                        if (selectedItem.getType().equals("Topic")) {
+                            serverThread.send("Utopi" + selectedItem.getAdditionalValue() + "::" + newName);
+                        }
+                    } else {
+                        outputArea.clear();
+                        textArea.clear();
+                        confirm.setVisible(true);
+                        outputLabel.setText(selectedItem.getValue());
+                        outputArea.setVisible(true);
+                        send.setVisible(true);
+                        textArea.setVisible(true);
+                    }
                 }
-            }
-        });
+            });
 
-        MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(event -> {
-            if (selectedItem != null && selectedItem != root) {
-                selectedItem.getParent().getChildren().remove(selectedItem);
-            }
-        });
-
-        contextMenuSubjectTopic.getItems().addAll(addMenuItem, updateMenuItem, deleteMenuItem);
-
-        //##################################################################
-
-        tree.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
-                System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
-
-                // For each item correct Context Menu Test(updata, delete) , Try() , Else(Add,Update,Delete)
-                if (selectedItem.getType().equals("Test")) {
-                    System.out.println("Test");
-                    contextMenuSubjectTopic.getItems().clear();
-                    contextMenuSubjectTopic.getItems().addAll(updateMenuItem , deleteMenuItem);
-                } else if (selectedItem.getType().equals("Try")) {
-                    contextMenuSubjectTopic.getItems().clear();
-                } else {
-                    contextMenuSubjectTopic.getItems().clear();
-                    contextMenuSubjectTopic.getItems().addAll(addMenuItem , updateMenuItem , deleteMenuItem);
+            MenuItem deleteMenuItem = new MenuItem("Удалить");
+            deleteMenuItem.setOnAction(event -> {
+                if (selectedItem != null && selectedItem != root) {
+                    selectedItem.getParent().getChildren().remove(selectedItem);
+                    if (selectedItem.getType().equals("Subject")) {
+                        serverThread.send("Dsubj" + selectedItem.getAdditionalValue());
+                    }
+                    if (selectedItem.getType().equals("Topic")) {
+                        serverThread.send("Dtopi" + selectedItem.getAdditionalValue());
+                    }
+                    if (selectedItem.getType().equals("Test")) {
+                        serverThread.send("Dtest" + selectedItem.getAdditionalValue());
+                    }
                 }
+            });
 
-                if (selectedItem != null) {
-                    contextMenuSubjectTopic.show(tree, event.getScreenX(), event.getScreenY());
-                } else {
-                    contextMenuSubjectTopic.hide();
+            contextMenuSubjectTopic.getItems().addAll(addMenuItem, updateMenuItem, deleteMenuItem);
+
+            tree.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
+                    System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
+
+                    if (selectedItem.getType().equals("Test")) {
+                        System.out.println("Test");
+                        contextMenuSubjectTopic.getItems().clear();
+                        contextMenuSubjectTopic.getItems().addAll(deleteMenuItem);
+                    } else if (selectedItem.getType().equals("Try")) {
+                        contextMenuSubjectTopic.getItems().clear();
+                    } else {
+                        contextMenuSubjectTopic.getItems().clear();
+                        contextMenuSubjectTopic.getItems().addAll(addMenuItem, updateMenuItem, deleteMenuItem);
+                    }
+
+                    if (selectedItem != null) {
+                        contextMenuSubjectTopic.show(tree, event.getScreenX(), event.getScreenY());
+                    } else {
+                        contextMenuSubjectTopic.hide();
+                    }
                 }
-            }
-            if (event.getClickCount() == 2) {
-                CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
-                System.out.println("Selected item: " + selectedItem.getValue()  + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
-                if (selectedItem.getType().equals("Try")){
+                if (event.getClickCount() == 2) {
+                    CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
+                    System.out.println("Selected item: " + selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
+                    if (selectedItem.getType().equals("Try")) {
                         this.choosenTryId = selectedItem.getAdditionalValue();
-                        serverThread.send("STRY_"+selectedItem.getAdditionalValue());
+                        serverThread.send("STRY_" + selectedItem.getAdditionalValue());
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -140,7 +162,12 @@ public class TeacherMainController {
         }
     }
 
-
+    public void clearTree(){
+        TreeItem<String> rootItem = tree.getRoot();
+        rootItem.getChildren().clear();
+        tree.setRoot(null);
+        serverThread.send("STTT_");
+    }
 
     public void initialize(){
         serverThread.send("STTT_");

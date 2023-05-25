@@ -35,6 +35,14 @@ public class ClientThread extends Thread {
                     case "GTRY_" -> server.getTry(this,postfix);
                     case "STRY_" -> server.sendTry(this,postfix);
                     case "STRYR" -> server.getResult(this,postfix);
+                    case "Dsubj" -> server.getDeleteSubject(this,postfix);
+                    case "Dtopi" -> server.getDeleteTopic(this,postfix);
+                    case "Dtest" -> server.getDeleteTest(this,postfix);
+                    case "Usubj" -> server.getUpdateSubject(this,postfix);
+                    case "Utopi" -> server.getUpdateTopic(this,postfix);
+                    case "Nsubj" -> server.getNewSubject(this,postfix);
+                    case "Ntopi" -> server.getNewTopic(this,postfix);
+                    case "Ntest" -> server.getNewTest(this,postfix);
                 }
             }
             server.removeClient(this);

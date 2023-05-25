@@ -453,8 +453,7 @@ public class Storage {
             System.out.println("Failed to update try result: " + e.getMessage());
         }
     }
-
-    public void addNewTest(String testName, List<String> questions) {
+    public void addNewTest(String topicID, String testName, List<String> questions) {
         try {
             // Insert the new test into the 'Test' table
             String insertTestQuery = "INSERT INTO Test (test_name) VALUES (?)";
@@ -467,7 +466,17 @@ public class Storage {
             int testId = -1;
             if (generatedKeys.next()) {
                 testId = generatedKeys.getInt(1);
+            } else {
+                System.out.println("Failed to add a new test. No test_id obtained.");
+                return;
             }
+
+            // Associate the test with the topic in the 'TopicTest' table
+            String insertTopicTestQuery = "INSERT INTO TopicTest (topic_id, test_id) VALUES (?, ?)";
+            PreparedStatement insertTopicTestStatement = connection.prepareStatement(insertTopicTestQuery);
+            insertTopicTestStatement.setString(1, topicID);
+            insertTopicTestStatement.setInt(2, testId);
+            insertTopicTestStatement.executeUpdate();
 
             // Insert questions into the 'TestQuestion' table
             String insertQuestionQuery = "INSERT INTO TestQuestion (test_id, question, question_num) VALUES (?, ?, ?)";
@@ -475,7 +484,7 @@ public class Storage {
             for (int i = 0; i < questions.size(); i++) {
                 insertQuestionStatement.setInt(1, testId);
                 insertQuestionStatement.setString(2, questions.get(i));
-                insertQuestionStatement.setInt(3, i );
+                insertQuestionStatement.setInt(3, i + 1);
                 insertQuestionStatement.executeUpdate();
             }
 
@@ -485,6 +494,7 @@ public class Storage {
             System.out.println("Failed to add a new test.");
         }
     }
+
 
     public void deleteTest(String testID) {
         try {
@@ -531,7 +541,7 @@ public class Storage {
             }
 
             // Delete the topic
-            String deleteTopicQuery = "DELETE FROM Topic WHERE topic_id = ?";
+            String deleteTopicQuery = "DELETE FROM Topiс WHERE topic_id = ?";
             PreparedStatement deleteTopicStatement = connection.prepareStatement(deleteTopicQuery);
             deleteTopicStatement.setString(1, topicId);
             deleteTopicStatement.executeUpdate();
@@ -667,6 +677,49 @@ public class Storage {
         }
 
         return topicIds;
+    }
+
+    public void addTopic(String subjectId, String newTopicName) {
+        try {
+            // Create a prepared statement with the SQL insert statement
+            String insertTopicQuery = "INSERT INTO Topic (topic_name) VALUES (?)";
+            PreparedStatement insertStatement = connection.prepareStatement(insertTopicQuery, Statement.RETURN_GENERATED_KEYS);
+
+            // Set the parameter values
+            insertStatement.setString(1, newTopicName);
+
+            // Execute the insert statement
+            int affectedRows = insertStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                System.out.println("Failed to add topic. No rows affected.");
+                return;
+            }
+
+            // Retrieve the generated topic_id
+            ResultSet generatedKeys = insertStatement.getGeneratedKeys();
+            int topicId;
+            if (generatedKeys.next()) {
+                topicId = generatedKeys.getInt(1);
+                System.out.println("Topic added successfully with topic_id: " + topicId);
+            } else {
+                System.out.println("Failed to add topic. No topic_id obtained.");
+                return;
+            }
+
+            // Insert a row into the SubjectTopic table to associate the new topic with the subject
+            String insertSubjectTopicQuery = "INSERT INTO SubjectTopic (subject_id, topic_id) VALUES (?, ?)";
+            PreparedStatement insertSubjectTopicStatement = connection.prepareStatement(insertSubjectTopicQuery);
+            insertSubjectTopicStatement.setString(1, subjectId);
+            insertSubjectTopicStatement.setInt(2, topicId);
+            insertSubjectTopicStatement.executeUpdate();
+
+            System.out.println("Topic added successfully and associated with subject.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to add topic.");
+        }
     }
 
 }

@@ -134,13 +134,21 @@ public class Server {
         }
 
 
+    // addNewTopic
+
+        public void getNewTopic(ClientThread sender, String addTopic) {
+            String[] mainParts  = addTopic.split("::");
+            String newTopic = mainParts[1];
+            String subjectId = mainParts[0];
+            storage.addTopic(subjectId , newTopic);
+        }
 
     //getUpdateSubject
 
         public void getUpdateSubject(ClientThread sender, String updateSubject){
              int subjectId = Integer.parseInt(updateSubject.split("::")[0]);
              String newSubject = updateSubject.split("::")[1];
-             storage.updateSubject(subjectId , updateSubject);
+             storage.updateSubject(subjectId , newSubject);
         }
 
     //getDeleteSubject
@@ -167,12 +175,13 @@ public class Server {
 
         public void getNewTest(ClientThread sender, String newTestText){
             String[] mainParts = newTestText.split("\\*\\*");
-            String testName = mainParts[0];
+            String testName = mainParts[1];
+            String topicId = mainParts[0];
             List<String> questions = new ArrayList<>();
-            for (int i = 1; i < mainParts.length; i++){
+            for (int i = 2; i < mainParts.length; i++){
                 questions.add(mainParts[i]);
             }
-            storage.addNewTest(testName , questions);
+            storage.addNewTest(topicId , testName , questions);
         }
 
     // getDeleteTest
@@ -181,6 +190,12 @@ public class Server {
             storage.deleteTest(testID);
         }
 
+
+    // sendTry
+    public void sendTry(ClientThread receiver, String tryId){
+        String sendTry = storage.getTryById(tryId);
+        receiver.send("SR"+sendTry);
+    }
 
 
     // getResult
