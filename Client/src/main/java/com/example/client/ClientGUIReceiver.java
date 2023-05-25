@@ -1,10 +1,5 @@
 package com.example.client;
 
-import javafx.application.Platform;
-
-import java.util.Arrays;
-import java.util.List;
-
 public class ClientGUIReceiver {
 
     StudentMainController studentController = null;
@@ -51,4 +46,7 @@ public class ClientGUIReceiver {
         this.logInController.handleLoginAsk(answer);
     }
 
+    public void getResultForStudent(String postfix) {
+        this.studentController.getResultNotTest(postfix);
+    }
 }

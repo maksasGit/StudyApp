@@ -5,8 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +25,7 @@ public class TeacherMainController {
     @FXML
     private TreeView tree;
     @FXML
-    private HBox mainWindow;
-    @FXML
-    private VBox mainOutput;
-    @FXML
-    private HBox mainMenu;
-    @FXML
     private Button send;
-    @FXML
-    private Button back;
     @FXML
     private Label outputLabel;
     @FXML
@@ -43,8 +34,6 @@ public class TeacherMainController {
     private TextArea outputArea;
     @FXML
     private Button confirm;
-
-
     private CustomTreeItem<String> selectedItem;
     private CustomTreeItem<String> previousSelectedItem;
 
@@ -259,16 +248,9 @@ class CustomTreeItem<String> extends TreeItem<String> {
         return additionalValue;
     }
 
-    public void setAdditionalValue(String additionalValue) {
-        this.additionalValue = additionalValue;
-    }
-
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 }
 

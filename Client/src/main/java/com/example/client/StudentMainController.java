@@ -1,29 +1,21 @@
 package com.example.client;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentMainController {
 
-    ServerThread serverThread;
-    ClientGUIReceiver receiver;
+    private ServerThread serverThread;
+    private ClientGUIReceiver receiver;
 
-    Try currentTry = new Try();
-
+    private Try currentTry = new Try();
 
     public StudentMainController(ServerThread serverThread, ClientGUIReceiver receiver) {
         this.serverThread = serverThread;
@@ -32,102 +24,95 @@ public class StudentMainController {
     }
 
     @FXML
-    private TreeView tree;
+    private TreeView<String> subjectTreeView;
 
-    @FXML
-    private HBox mainWindow;
-    @FXML
-    private VBox mainOutput;
-    @FXML
-    private HBox mainMenu;
-    @FXML
-    private Button send;
-    @FXML
-    private Button back;
     @FXML
     private Label outputLabel;
+
     @FXML
-    private TextField textArea;
+    private TextField answerTextField;
+
     @FXML
     private TextArea outputArea;
+    @FXML
+    private Button sendButton;
 
-
+    private CustomTreeItem<String> selectedItem;
 
     public void updateTreeView(String textTree) {
-        TreeItem<String> root = new TreeItem<>("My Subjects" );
-        tree.setRoot(root);
+        CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else", "0");
+        subjectTreeView.setRoot(root);
         Tree newTree = Tree.fromSend(textTree);
         addItemsToTreeView(root, newTree.items, 1);
 
-        tree.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(new ChangeListener<TreeItem<String>>() {
-                    @Override
-                    public void changed(ObservableValue<? extends TreeItem<String>> observableValue, TreeItem<String> stringTreeItem, TreeItem<String> t1) {
-                        System.out.println("Selected item: " + t1.getValue());
-                        String[] parts = t1.getValue().split(":");
-                        if (parts.length == 3) {
-                            if (parts[1].equals("3")) {
-                                outputLabel.setText(parts[0]);
-                                currentTry.testId = Integer.parseInt(parts[2]);
-                                serverThread.send("GT" + parts[2]);
-                            }
-                        }
-                    }
-                });
+        subjectTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getClickCount() == 2) {
+                selectedItem = (CustomTreeItem<String>) subjectTreeView.getSelectionModel().getSelectedItem();
+                System.out.println(selectedItem.getValue() + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
+                if (selectedItem.getType().equals("Test")) {
+                    outputLabel.setText(selectedItem.getValue());
+                    currentTry.setTestId(Integer.parseInt(selectedItem.getAdditionalValue()));
+                    serverThread.send("GTEST" + selectedItem.getAdditionalValue());
+                }
+            }
+        });
     }
 
-    private void addItemsToTreeView(TreeItem<String> parentItem, List<StringID> items, int depth) {
+    private void addItemsToTreeView(CustomTreeItem<String> parentItem, List<StringID> items, int depth) {
+        Map<Integer, String> types = new HashMap<>();
+        types.put(1, "Subject");
+        types.put(2, "Topic");
+        types.put(3, "Test");
+        types.put(4, "Try");
         for (StringID item : items) {
-            TreeItem<String> newItem = new TreeItem<>(item.name+":"+depth+":"+item.id);
-            String itemCode = depth + ":" + item.id;
+            String itemCode = String.valueOf(item.id);
+            String itemType = types.get(depth);
+            CustomTreeItem<String> newItem = new CustomTreeItem<>(item.name, itemType, itemCode);
             parentItem.getChildren().add(newItem);
             addItemsToTreeView(newItem, item.items, depth + 1);
         }
     }
 
-    public void getTest(String testQuestions){
+    public void getTest(String testQuestions) {
+        sendButton.setDisable(false);
         String[] questionsFromText = testQuestions.split("##");
-        for (String questionFromText : questionsFromText){
+        for (String questionFromText : questionsFromText) {
             String[] questionPart = questionFromText.split("\\*\\*");
-            currentTry.addQuestion(new Question(questionPart[0] , Integer.parseInt(questionPart[1])));
+            currentTry.addQuestion(new Question(questionPart[0], Integer.parseInt(questionPart[1])));
         }
+        currentTry.shuffleQuestions();
         showNextQuestion();
     }
 
-    public void showNextQuestion(){
+    public void showNextQuestion() {
         outputArea.clear();
         String questionText = currentTry.nextQuestion();
-        if (questionText.equals("Finish")){
-            // send Try (test_id + (answer, question_num))
-            String testID = String.valueOf(currentTry.testId);
-            String answerQuestionNum = "";
-            for (Question question : currentTry.questions){
-                String answer = question.answer + "::" + question.question_num;
-                answerQuestionNum = answerQuestionNum.concat(answer+"**");
+        if (questionText.equals("Finish")) {
+            String testID = String.valueOf(currentTry.getTestId());
+            StringBuilder answerQuestionNum = new StringBuilder();
+            for (Question question : currentTry.getQuestions()) {
+                String answer = question.getAnswer() + "::" + question.getQuestionNum();
+                answerQuestionNum.append(answer).append("**");
             }
-            serverThread.send("TT" + testID + "**" + answerQuestionNum);
+            sendButton.setDisable(true);
+            serverThread.send("GTRY_" + testID + "**" + answerQuestionNum);
         }
         outputArea.appendText(questionText);
-
     }
 
-    public void setAnswer(){
-        currentTry.setAnswer(textArea.getText());
-        textArea.clear();
+    public void setAnswer() {
+        currentTry.setAnswer(answerTextField.getText());
+        answerTextField.clear();
         showNextQuestion();
     }
 
-    public void selectedTreeItem(){
-        TreeItem<String> item = (TreeItem<String>) tree.getSelectionModel().getSelectedItem();
-        System.out.println(item.getValue());
+    public void initialize() {
+        serverThread.send("STT__");
     }
 
-
-    public void initialize(){
-        serverThread.send("STTT_");
-    }
-
-    public void closeWindow(){
+    public void getResultNotTest(String result) {
+        sendButton.setDisable(true);
+        outputArea.clear();
+        outputArea.appendText("Your Result is: " + result);
     }
 }

@@ -61,6 +61,7 @@ public class ServerThread extends Thread {
                     case "ST" -> this.receiver.getTestQuestions(postfix);
                     case "SR" -> this.receiver.getTry(postfix);
                     case "Lo" -> this.receiver.getAnswer(postfix);
+                    case "Sr" -> this.receiver.getResultForStudent(postfix);
                 }
             }
         } catch (IOException var10) {

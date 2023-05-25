@@ -56,6 +56,33 @@ public class Storage {
         return tree.toSend();
     }
 
+    public String getTreeForStudent(String user_login) {
+        Tree tree = new Tree();
+        try {
+            // Retrieve subjects
+            List<CustomString> subjects = getSubjectsForStudent(user_login);
+            tree.items.addAll(subjects);
+
+            // Retrieve topics for each subject
+            for (CustomString subject : subjects) {
+                List<CustomString> topics = getTopicsForSubject(subject.id);
+                subject.items.addAll(topics);
+
+                // Retrieve tests for each topic
+                for (CustomString topic : topics) {
+                    List<CustomString> tests = getTestsForTopic(topic.id);
+                    topic.items.addAll(tests);
+
+                }
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve tree data from the database: " + e.getMessage());
+        }
+
+        return tree.toSend();
+    }
+
     private List<CustomString> getSubjects() throws SQLException {
         List<CustomString> subjects = new ArrayList<>();
         Statement statement = connection.createStatement();
@@ -63,6 +90,29 @@ public class Storage {
         while (resultSet.next()) {
             int id = resultSet.getInt("subject_id");
             String name = resultSet.getString("subject_name");
+            subjects.add(new CustomString(name, id));
+        }
+        resultSet.close();
+        statement.close();
+        return subjects;
+    }
+
+    private List<CustomString> getSubjectsForStudent(String user_login) throws SQLException {
+        System.out.println("getSubjectsForStudent: " + user_login);
+        List<CustomString> subjects = new ArrayList<>();
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT Subject.subject_id, Subject.subject_name " +
+                        "FROM Subject " +
+                        "JOIN SubjectGroup ON Subject.subject_id = SubjectGroup.subject_id " +
+                        "JOIN User ON SubjectGroup.group_id = User.group_id " +
+                        "WHERE User.login = ?"
+        );
+        statement.setString(1, user_login);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("subject_id");
+            String name = resultSet.getString("subject_name");
+            System.out.println("\t Subject_info: " + id + " " + name);
             subjects.add(new CustomString(name, id));
         }
         resultSet.close();
@@ -278,5 +328,112 @@ public class Storage {
     }
 
 
+    public String getUserIdbyUserLogin(String userLogin){
+        StringBuilder answer = new StringBuilder();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT user_id FROM User " +
+                    "WHERE login = ? ");
+            statement.setString(1, userLogin);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int userID = resultSet.getInt("user_id");
+                answer.append(userID);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve answers from the database: " + e.getMessage());
+        }
+
+        return answer.toString();
+    }
+
+
+    public void saveTry(String testId, String userLogin, List<String> answers, List<String> answersNum) {
+        String userId = getUserIdbyUserLogin(userLogin);
+        try {
+            // Insert the new Try record
+            String insertTryQuery = "INSERT INTO Try (test_id, user_id) VALUES (?, ?)";
+            try (PreparedStatement tryStatement = connection.prepareStatement(insertTryQuery)) {
+                tryStatement.setString(1, testId);
+                tryStatement.setString(2, userId);
+                tryStatement.executeUpdate();
+            }
+
+            // Get the try_id of the newly inserted Try
+            String selectTryIdQuery = "SELECT try_id FROM Try WHERE test_id = ? AND user_id = ?";
+            int tryId;
+            try (PreparedStatement tryIdStatement = connection.prepareStatement(selectTryIdQuery)) {
+                tryIdStatement.setString(1, testId);
+                tryIdStatement.setString(2, userId);
+                try (ResultSet tryIdResult = tryIdStatement.executeQuery()) {
+                    if (tryIdResult.next()) {
+                        tryId = tryIdResult.getInt("try_id");
+                    } else {
+                        // Handle error if the try_id was not retrieved
+                        throw new SQLException("Failed to retrieve try_id");
+                    }
+                }
+            }
+
+            // Insert the answers into TryAnswer table
+            String insertTryAnswerQuery = "INSERT INTO TryAnswer (try_id, answer, answer_num) VALUES (?, ?, ?)";
+            try (PreparedStatement tryAnswerStatement = connection.prepareStatement(insertTryAnswerQuery)) {
+                for (int i = 0; i < answers.size(); i++) {
+                    tryAnswerStatement.setInt(1, tryId);
+                    tryAnswerStatement.setString(2, answers.get(i));
+                    tryAnswerStatement.setString(3, answersNum.get(i));
+                    tryAnswerStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve answers from the database: " + e.getMessage());
+        }
+    }
+
+
+    public int getResult(String testID, String userLogin) {
+        String userId = getUserIdbyUserLogin(userLogin);
+        try {
+            String query = "SELECT result FROM Try WHERE test_id = ? AND user_id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, testID);
+            statement.setString(2, userId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int result = resultSet.getInt("result");
+                return result;
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to check result from the database: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public boolean isUserHaveTry(String testID, String userLogin) {
+        System.out.println("start isUserHaveTry");
+        String userID = getUserIdbyUserLogin(userLogin);
+        System.out.println("get userID: " + userID);
+        try {
+            String query = "SELECT COUNT(*) AS count FROM Try WHERE user_id = ? AND test_id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userID);
+            statement.setString(2, testID);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                return (count > 0);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to check if user has a try in the database: " + e.getMessage());
+        }
+        return false;
+    }
 
 }

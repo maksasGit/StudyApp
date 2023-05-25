@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -24,11 +23,8 @@ public class LogInController {
     @FXML
     private PasswordField passwordField;
 
-    @FXML
-    private Button LogInButton;
-
-    private ServerThread serverThread;
-    private ClientGUIReceiver receiver;
+    private final ServerThread serverThread;
+    private final ClientGUIReceiver receiver;
 
     public LogInController(ServerThread serverThread, ClientGUIReceiver receiver) {
         this.serverThread = serverThread;
@@ -67,15 +63,11 @@ public class LogInController {
             String username = usernameField.getText();
             Platform.runLater(() -> {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-                fxmlLoader.setControllerFactory(controllerClass -> {
-                    if (userType.equals("student")) {
-                        return new StudentMainController(serverThread, receiver);
-                    } else if (userType.equals("teacher")) {
-                        return new TeacherMainController(serverThread, receiver);
-                    } else if (userType.equals("admin")) {
-                        return new AdminController(serverThread, receiver);
-                    }
-                    return null;
+                fxmlLoader.setControllerFactory(controllerClass -> switch (userType) {
+                    case "student" -> new StudentMainController(serverThread, receiver);
+                    case "teacher" -> new TeacherMainController(serverThread, receiver);
+                    case "admin" -> new AdminController(serverThread, receiver);
+                    default -> null;
                 });
 
                 try {
@@ -88,12 +80,12 @@ public class LogInController {
                     throw new RuntimeException("Failed to load " + fxmlFile + ": " + e.getMessage(), e);
                 }
             });
+            Platform.runLater(() -> {
+                Stage mainStage = (Stage) root.getScene().getWindow();
+                mainStage.close();
+            });
         }
 
-        Platform.runLater(() -> {
-            Stage mainStage = (Stage) root.getScene().getWindow();
-            mainStage.close();
-        });
     }
 
 }

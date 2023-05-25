@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.lang.ref.Cleaner;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Server {
     private ServerSocket serverSocket;
     private Storage storage = new Storage();
     private List<ClientThread> clients = new ArrayList<>();
+
+    private Map<ClientThread, String> clientsName = new HashMap<>();
 
     public Server(int port) {
         try {
@@ -56,12 +56,6 @@ public class Server {
     //################################################################################
     //############################COMMON##############################################
 
-    // send Tree
-
-    public void sendSubjectTopicTestTree(ClientThread receiver) {
-        String result = storage.getTree();
-        receiver.send("TR" + result);
-    }
 
 
     // login
@@ -72,31 +66,67 @@ public class Server {
         String answer = storage.checkLogin(parts[0] , parts[1]);
         System.out.println("get answer" + answer);
         receiver.send("Lo" + answer);
+        if (answer.split(":")[0].equals("OK")){
+            clients.add(receiver);
+            clientsName.put(receiver,parts[0]);
+        }
     }
 
 
     //#################################################################################
     //############################STUDENT##############################################
 
+    // send Tree
+    public void sendSubjectTopicTest(ClientThread receiver) {
+        String result = storage.getTreeForStudent(clientsName.get(receiver));
+        receiver.send("TR" + result);
+    }
 
     // getTry
 
         public void getTry(ClientThread sender, String stringTry){
-            //stringTry = testID**(answer::questionNum)**(answer::questionNum)
-            // storage.saveTry(newTry)
+             String[] mainParts  = stringTry.split("\\*\\*");
+             String testId = mainParts[0];
+             String userLogin = clientsName.get(sender);
+             List<String> answers = new ArrayList<>();
+             List<String> answersNum = new ArrayList<>();
+             for (String mainPart : mainParts){
+                 if (mainPart.split("::").length == 2) {
+                     System.out.println(mainPart);
+                     answers.add(mainPart.split("::")[0]);
+                     answersNum.add(mainPart.split("::")[1]);
+                 }
+             }
+             storage.saveTry(testId , userLogin, answers , answersNum);
+             System.out.println("try saved");
         }
 
     // sendTest
-        public void sendTest(ClientThread receiver, String testID){
-            // add if user try test , then send TryResult
-            String testQuestions = storage.getTestByID(testID);
-            receiver.send("ST"+testQuestions);
+        public void sendTest(ClientThread receiver, String testID) {
+            System.out.println("Start check try");
+            if (storage.isUserHaveTry(testID, clientsName.get(receiver))) {
+                System.out.println("u have try");
+                int result = storage.getResult(testID, clientsName.get(receiver));
+                System.out.println("you have result: " + result);
+                receiver.send("Sr" + result);
+            } else {
+                System.out.println("no trys");
+                String testQuestions = storage.getTestByID(testID);
+                receiver.send("ST" + testQuestions);
+            }
         }
 
 
     //###############################################################################
     //############################TEACHER############################################
 
+
+    // send Tree
+
+    public void sendSubjectTopicTestTree(ClientThread receiver) {
+        String result = storage.getTree();
+        receiver.send("TR" + result);
+    }
 
     // getSubject
 

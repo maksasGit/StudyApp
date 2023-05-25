@@ -1,21 +1,28 @@
 package com.example.client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Try {
-    public int testId;
-
-    public int currentQuestion = 0;
-    public List<Question> questions = new ArrayList<>();
+    private int testId;
+    private int currentQuestion = 0;
+    private List<Question> questions = new ArrayList<>();
 
     public Try() {
+    }
+
+    public int getTestId() {
+        return testId;
     }
 
     public void setTestId(int testId) {
         this.testId = testId;
     }
 
+    public List<Question> getQuestions() {
+        return questions;
+    }
 
     public void addQuestion(Question newQuestion){
         this.questions.add(newQuestion);
@@ -25,32 +32,42 @@ public class Try {
         if (currentQuestion >= questions.size()) {
             return "Finish";
         }
-        else return questions.get(currentQuestion).question;
+        else return questions.get(currentQuestion).getQuestion();
     }
-
 
     public void setAnswer(String answer){
-
         if (currentQuestion < questions.size()) {
-            questions.get(currentQuestion).answer = answer;
+            questions.get(currentQuestion).setAnswer(answer);
             currentQuestion++;
         }
-        // else show that test is end and wait for result
+        // else show that the test is over and wait for the result
     }
 
-    // shuffle quesions
-
+    public void shuffleQuestions(){
+        Collections.shuffle(questions);
+    }
 }
 
 class Question{
-    public String question;
-    public int question_num;
+    private String question;
+    private int questionNum;
+    private String answer;
 
-    public String answer;
-
-    public Question(String question, int question_num) {
+    public Question(String question, int questionNum) {
         this.question = question;
-        this.question_num = question_num;
+        this.questionNum = questionNum;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public int getQuestionNum() {
+        return questionNum;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 
     public void setAnswer(String answer){

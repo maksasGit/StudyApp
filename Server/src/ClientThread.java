@@ -30,6 +30,7 @@ public class ClientThread extends Thread {
                 switch(prefix) {
                     case "LOGIN" -> server.login(this,postfix);
                     case "STTT_" -> server.sendSubjectTopicTestTree(this);
+                    case "STT__" -> server.sendSubjectTopicTest(this);
                     case "GTEST" -> server.sendTest(this,postfix);
                     case "GTRY_" -> server.getTry(this,postfix);
                     case "STRY_" -> server.sendTry(this,postfix);
