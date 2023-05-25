@@ -128,31 +128,39 @@ public class Server {
         receiver.send("TR" + result);
     }
 
+    // get newSubject
+        public void getNewSubject(ClientThread sender, String newSubject){
+            storage.addSubject(newSubject);
+        }
+
+
 
     //getUpdateSubject
 
         public void getUpdateSubject(ClientThread sender, String updateSubject){
-            // int subjectId = updateSubject
-            // Subject updateSubject = Subject(updateSubject)
-            // storage.updateSubject(subjectId , updateSubject)
+             int subjectId = Integer.parseInt(updateSubject.split("::")[0]);
+             String newSubject = updateSubject.split("::")[1];
+             storage.updateSubject(subjectId , updateSubject);
         }
 
     //getDeleteSubject
-        public void getDeleteSubject(ClientThread sender, String deleteSubject){
-            // storage.deleteSubject(subjectId)
+        public void getDeleteSubject(ClientThread sender, String subjectId){
+             storage.deleteSubject(subjectId);
         }
 
 
     //getUpdateTopic
 
         public void getUpdateTopic(ClientThread sender, String updateTopic){
-            // storage.updateTopic(topicId, updateTopic)
+            String topicId = updateTopic.split("::")[0];
+            String newTopicName = updateTopic.split("::")[1];
+            storage.updateTopic(topicId, newTopicName);
         }
 
     //getDeleteTopic
 
-        public void getDeleteTopiv(ClientThread sender, String deleteTopic){
-            // storage.deleteTopic(topicId)
+        public void getDeleteTopic(ClientThread sender, String topicId){
+             storage.deleteTopic(topicId);
         }
 
         // getNewTest

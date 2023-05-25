@@ -520,4 +520,153 @@ public class Storage {
         }
     }
 
+    public void deleteTopic(String topicId) {
+        try {
+            // Retrieve all tests associated with the specified topic
+            List<String> testIds = getTestsByTopic(topicId);
+
+            // Delete each test associated with the topic
+            for (String testId : testIds) {
+                deleteTest(testId);
+            }
+
+            // Delete the topic
+            String deleteTopicQuery = "DELETE FROM Topic WHERE topic_id = ?";
+            PreparedStatement deleteTopicStatement = connection.prepareStatement(deleteTopicQuery);
+            deleteTopicStatement.setString(1, topicId);
+            deleteTopicStatement.executeUpdate();
+
+            System.out.println("Topic and associated tests deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to delete topic and associated tests.");
+        }
+    }
+
+    public List<String> getTestsByTopic(String topicId) {
+        List<String> testIds = new ArrayList<>();
+
+        try {
+            // Retrieve the test IDs associated with the specified topic
+            String selectTestsQuery = "SELECT test_id FROM TopicTest WHERE topic_id = ?";
+            PreparedStatement selectTestsStatement = connection.prepareStatement(selectTestsQuery);
+            selectTestsStatement.setString(1, topicId);
+            ResultSet resultSet = selectTestsStatement.executeQuery();
+
+            // Add the test IDs to the list
+            while (resultSet.next()) {
+                String testId = resultSet.getString("test_id");
+                testIds.add(testId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return testIds;
+    }
+
+    public void updateTopic(String topicId, String newTopicName) {
+        try {
+            // Update the topic name in the 'Topic' table
+            String updateTopicQuery = "UPDATE Topic SET topic_name = ? WHERE topic_id = ?";
+            PreparedStatement updateTopicStatement = connection.prepareStatement(updateTopicQuery);
+            updateTopicStatement.setString(1, newTopicName);
+            updateTopicStatement.setString(2, topicId);
+            updateTopicStatement.executeUpdate();
+
+            System.out.println("Topic updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to update topic.");
+        }
+    }
+
+    public void addSubject(String newSubject) {
+        try {
+            // Insert a new subject into the 'Subject' table
+            String insertSubjectQuery = "INSERT INTO Subject (subject_name) VALUES (?)";
+            PreparedStatement insertSubjectStatement = connection.prepareStatement(insertSubjectQuery);
+            insertSubjectStatement.setString(1, newSubject);
+            insertSubjectStatement.executeUpdate();
+
+            System.out.println("Subject added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to add subject.");
+        }
+    }
+
+    public void updateSubject(int subjectId, String newSubjectName) {
+        try {
+            // Update the subject name in the 'Subject' table
+            String updateSubjectQuery = "UPDATE Subject SET subject_name = ? WHERE subject_id = ?";
+            PreparedStatement updateSubjectStatement = connection.prepareStatement(updateSubjectQuery);
+            updateSubjectStatement.setString(1, newSubjectName);
+            updateSubjectStatement.setInt(2, subjectId);
+            updateSubjectStatement.executeUpdate();
+
+            System.out.println("Subject updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to update subject.");
+        }
+    }
+
+    public void deleteSubject(String subjectId) {
+        try {
+            // Retrieve all topics associated with the subject
+            List<String> topicIds = getTopicsBySubject(subjectId);
+
+            // Delete records from the 'SubjectTopic' table for the specified subject
+            String deleteSubjectTopicQuery = "DELETE FROM SubjectTopic WHERE subject_id = ?";
+            PreparedStatement deleteSubjectTopicStatement = connection.prepareStatement(deleteSubjectTopicQuery);
+            deleteSubjectTopicStatement.setString(1, subjectId);
+            deleteSubjectTopicStatement.executeUpdate();
+
+            // Delete records from the 'SubjectGroup' table for the specified subject
+            String deleteSubjectGroupQuery = "DELETE FROM SubjectGroup WHERE subject_id = ?";
+            PreparedStatement deleteSubjectGroupStatement = connection.prepareStatement(deleteSubjectGroupQuery);
+            deleteSubjectGroupStatement.setString(1, subjectId);
+            deleteSubjectGroupStatement.executeUpdate();
+
+            // Delete the subject record from the 'Subject' table
+            String deleteSubjectQuery = "DELETE FROM Subject WHERE subject_id = ?";
+            PreparedStatement deleteSubjectStatement = connection.prepareStatement(deleteSubjectQuery);
+            deleteSubjectStatement.setString(1, subjectId);
+            deleteSubjectStatement.executeUpdate();
+
+            // Delete all topics associated with the subject
+            for (String topicId : topicIds) {
+                deleteTopic(topicId);
+            }
+
+            System.out.println("Subject and associated records deleted successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to delete subject and associated records.");
+        }
+    }
+
+    public List<String> getTopicsBySubject(String subjectId) {
+        List<String> topicIds = new ArrayList<>();
+
+        try {
+            // Retrieve the topic IDs associated with the specified subject
+            String selectTopicsQuery = "SELECT topic_id FROM SubjectTopic WHERE subject_id = ?";
+            PreparedStatement selectTopicsStatement = connection.prepareStatement(selectTopicsQuery);
+            selectTopicsStatement.setString(1, subjectId);
+            ResultSet resultSet = selectTopicsStatement.executeQuery();
+
+            // Add the topic IDs to the list
+            while (resultSet.next()) {
+                String topicId = resultSet.getString("topic_id");
+                topicIds.add(topicId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return topicIds;
+    }
+
 }
