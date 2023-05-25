@@ -37,7 +37,7 @@ public class TeacherMainController {
     private CustomTreeItem<String> selectedItem;
     private CustomTreeItem<String> previousSelectedItem;
 
-
+    private String choosenTryId = null;
 
 
     public void updateTreeView(String textTree) {
@@ -118,6 +118,7 @@ public class TeacherMainController {
                 CustomTreeItem<String> selectedItem = (CustomTreeItem<String>) tree.getSelectionModel().getSelectedItem();
                 System.out.println("Selected item: " + selectedItem.getValue()  + " " + selectedItem.getType() + " " + selectedItem.getAdditionalValue());
                 if (selectedItem.getType().equals("Try")){
+                        this.choosenTryId = selectedItem.getAdditionalValue();
                         serverThread.send("STRY_"+selectedItem.getAdditionalValue());
                 }
             }
@@ -178,7 +179,7 @@ public class TeacherMainController {
             outputArea.setVisible(false);
             textArea.setVisible(false);
             outputLabel.setText("Choose something");
-            serverThread.send("STRYR" + textArea.getText());
+            serverThread.send("STRYR" + choosenTryId + "::" + textArea.getText() );
             textArea.clear();
         }
 

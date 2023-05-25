@@ -436,4 +436,22 @@ public class Storage {
         return false;
     }
 
+    public void setTryResult(int tryId, int newResult) {
+        try {
+            String updateQuery = "UPDATE Try SET result = ? WHERE try_id = ?";
+            PreparedStatement statement = connection.prepareStatement(updateQuery);
+            statement.setInt(1, newResult);
+            statement.setInt(2, tryId);
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Try result updated successfully.");
+            } else {
+                System.out.println("Failed to update try result. Try ID not found.");
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to update try result: " + e.getMessage());
+        }
+    }
+
 }

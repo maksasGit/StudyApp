@@ -196,9 +196,9 @@ public class Server {
 
     // getResult
         public void getResult(ClientThread sender, String result){
-            // int tryId = result
-            // int newResult = result
-            // storage.setTryResult(tryID, newResult)
+             int tryId = Integer.parseInt(result.split("::")[0]);
+             int newResult = Integer.parseInt(result.split("::")[1]);
+             storage.setTryResult(tryId, newResult);
         }
 
     // getUpdateResult
