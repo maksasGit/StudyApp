@@ -218,8 +218,8 @@ public class Server {
 
     // sendStudents
         public void sendStudents(ClientThread receiver){
-            // storage.getStudents()
-            receiver.send("ST");
+            storage.getStudents();
+            receiver.send("sl"+storage.getStudents());
         }
 
     // getAddInGroup
@@ -237,8 +237,8 @@ public class Server {
 
     // getGroup
 
-        public void getGroup(ClientThread sender, String newGruop){
-            // storage.addGroup(newGroup)
+        public void getGroup(ClientThread sender, String newGroup){
+             storage.addGroup(newGroup);
         }
 
     // getUpdateGroup
@@ -252,5 +252,16 @@ public class Server {
             //storage.deleteGroup(groupId)
         }
 
+        public void addTeacher(ClientThread sender, String data){
+            String login = data.split("::")[0];
+            String password = data.split("::")[1];
+            storage.addTeacher(login, password);
+        }
 
+
+    public void addStudent(ClientThread clientThread, String data) {
+        String login = data.split("::")[0];
+        String password = data.split("::")[1];
+        storage.addStudent(login,password);
+    }
 }

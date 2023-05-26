@@ -722,4 +722,101 @@ public class Storage {
         }
     }
 
+    public String getStudents() {
+        String result = "";
+
+        try {
+            // Create the SQL query
+            String query = "SELECT u.login FROM User u " +
+                    "INNER JOIN User_type ut ON u.user_type_id = ut.user_type_id " +
+                    "WHERE ut.user_type = 'student'";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            // Execute the query and retrieve the result set
+            ResultSet resultSet = statement.executeQuery();
+
+            // Iterate over the result set
+            while (resultSet.next()) {
+                String login = resultSet.getString("login");
+                result += "**" + login;
+            }
+
+            // Close the result set, statement, and connection
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    public void addGroup(String newGroup) {
+        try {
+            // Create the SQL query
+            String query = "INSERT INTO Group (group_name) VALUES (?)";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, newGroup);
+
+            // Execute the query
+            statement.executeUpdate();
+
+            // Close the statement
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+    }
+
+    public void addTeacher(String login, String password) {
+        try {
+            // Create the SQL query
+            String query = "INSERT INTO User (login, password, user_type_id) VALUES (?, ?, ?)";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, password);
+            statement.setInt(3, 2); // Assuming the user_type_id for teacher is 2
+
+            // Execute the query
+            statement.executeUpdate();
+
+            // Close the statement
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+    }
+
+    public void addStudent(String login, String password) {
+        try {
+            // Create the SQL query
+            String query = "INSERT INTO User (login, password, user_type_id) VALUES (?, ?, ?)";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, login);
+            statement.setString(2, password);
+            statement.setInt(3, 1);
+
+            // Execute the query
+            statement.executeUpdate();
+
+            // Close the statement
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+    }
+
 }

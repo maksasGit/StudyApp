@@ -43,6 +43,10 @@ public class ClientThread extends Thread {
                     case "Nsubj" -> server.getNewSubject(this,postfix);
                     case "Ntopi" -> server.getNewTopic(this,postfix);
                     case "Ntest" -> server.getNewTest(this,postfix);
+                    case "GLstu" -> server.sendStudents(this);
+                    case "Agrou" -> server.getGroup(this,postfix);
+                    case "Astud" -> server.addTeacher(this,postfix);
+                    case "Ateac" -> server.addStudent(this,postfix);
                 }
             }
             server.removeClient(this);

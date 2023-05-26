@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<HBox fx:id="mainWindow" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.TeacherMainController">
+<HBox fx:id="mainWindow" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #49A6B8;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.TeacherMainController">
 
    <children>
       <VBox prefHeight="400.0" prefWidth="250.0">
@@ -14,9 +14,9 @@
          </children>
       </VBox>
 
-      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="550.0" style="-fx-background-color: #F2F2F2;">
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="550.0" style="-fx-background-color: #49A6B8;">
          <children>
-            <Label fx:id="outputLabel" alignment="CENTER" prefHeight="25.0" prefWidth="300.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Choose something" textAlignment="CENTER">
+            <Label fx:id="outputLabel" alignment="CENTER" prefHeight="25.0" prefWidth="300.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Окно преподавателя" textAlignment="CENTER" textFill="#ea5e3a">
                <VBox.margin>
                   <Insets bottom="15.0" />
                </VBox.margin>
@@ -29,8 +29,11 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" spacing="10">
                <children>
                   <TextField fx:id="textArea" prefHeight="31.0" prefWidth="250.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" />
-                  <Button fx:id="send" onAction="#setTryResult" style="-fx-font-size: 14px; -fx-background-color: #4CAF50; -fx-text-fill: white;" text="Send" />
-                  <Button fx:id="confirm" mnemonicParsing="false" onAction="#onConfirmAction" text="Confirm" />
+                  <Button fx:id="send" onAction="#setTryResult" style="-fx-font-size: 14px; -fx-background-color: #E0D6CD; -fx-text-fill: #84514e;" text="Отправить" textFill="#84514e" />
+                  <Button fx:id="confirm" mnemonicParsing="false" onAction="#onConfirmAction" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: #E0D6CD;" text="Подтвердить" textFill="#84514e">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Button>
                </children>
             </HBox>
          </children>

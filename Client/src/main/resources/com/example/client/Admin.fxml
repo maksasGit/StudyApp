@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="Create">
-               <items>
-                  <Menu mnemonicParsing="false" text="Create user">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Create Student" />
-                        <MenuItem mnemonicParsing="false" text="Create Teacher" />
-                     </items>
-                  </Menu>
-                  <MenuItem mnemonicParsing="false" text="Create Group" />
-               </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-                  <Menu mnemonicParsing="false" text="Edit User">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminController">
+    <children>
+        <MenuBar fx:id="menuBar" prefHeight="26.0" prefWidth="558.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Create">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Change teacher login or password" />
-                        <MenuItem mnemonicParsing="false" text="Change student login or password" />
+                        <Menu mnemonicParsing="false" text="Create user">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#createUser" text="Create Student " />
+                                <MenuItem mnemonicParsing="false" onAction="#createTeacher" text="Create Teacher" />
+                            </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" onAction="#createGroup" text="Create Group" />
                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="Edit Group">
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Edit Group Name" />
-                        <MenuItem mnemonicParsing="false" text="Add subject to group" />
-                        <MenuItem mnemonicParsing="false" text="Remove subject from group" />
-                        <MenuItem mnemonicParsing="false" text="Add student to group" />
-                        <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                        <Menu mnemonicParsing="false" text="Edit User">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#changeTeacher" text="Change teacher login and password" />
+                                <MenuItem mnemonicParsing="false" onAction="#changeStudent" text="Change student login and password" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Edit Group">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#changeGroup" text="Change Group name" />
+                                <MenuItem mnemonicParsing="false" onAction="#addSubject" text="Add Subject to Group" />
+                                <MenuItem mnemonicParsing="false" onAction="#removeSubject" text="Remove Subject from Group" />
+                                <MenuItem mnemonicParsing="false" onAction="#addStudent" text="Add Student to Group" />
+                                <MenuItem mnemonicParsing="false" onAction="#removeStudent" text="Remove Student from Group" />
+                            </items>
+                        </Menu>
                     </items>
-                  </Menu>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <HBox prefHeight="370.0" prefWidth="600.0" />
-   </children>
+                </Menu>
+            </menus>
+        </MenuBar>
+      <Label fx:id="label">
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
+      </Label>
+        <HBox alignment="CENTER" prefHeight="370.0" prefWidth="600.0">
+         <children>
+            <ListView fx:id="list" prefHeight="312.0" prefWidth="307.0" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="15.0" top="15.0" />
+         </VBox.margin></HBox>
+    </children>
 </VBox>

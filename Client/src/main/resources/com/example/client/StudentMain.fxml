@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
@@ -13,12 +14,12 @@
             </cursor></TreeView>
         <VBox alignment="CENTER" prefHeight="400.0" prefWidth="456.0" style="-fx-background-color: #49A6B8;">
             <children>
-                <Label fx:id="outputLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Окно студента" textFill="#c94c2d" />
+                <Label fx:id="outputLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Окно студента" textFill="#ea5e3a" />
                 <TextArea fx:id="outputArea" blendMode="SRC_ATOP" prefHeight="272.0" prefWidth="353.0" style="-fx-font-size: 14px; -fx-background-color: #E0D6CD;" />
                 <HBox alignment="CENTER" prefHeight="94.0" prefWidth="451.0">
                     <children>
                         <TextField fx:id="answerTextField" style="-fx-font-size: 14px; -fx-pref-width: 200px;" />
-                        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#setAnswer" style="-fx-font-size: 14px; -fx-pref-width: 90px; -fx-background-color: #E0D6CD;" text="Отправить" textFill="#b9300e" />
+                        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#setAnswer" style="-fx-font-size: 14px; -fx-pref-width: 90px; -fx-background-color: #E0D6CD;" text="Отправить" textFill="#84514e" />
                     </children>
                 </HBox>
             </children>
