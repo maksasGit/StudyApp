@@ -132,6 +132,88 @@ public class AdminController {
     }
 
 
+    @FXML
+    public void addStudentToGroup() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Create Student");
+        dialog.setHeaderText("Enter Student Details");
+
+        TextInputDialog loginDialog = new TextInputDialog();
+        loginDialog.setTitle("Create Student");
+        loginDialog.setHeaderText("Enter Student Login");
+        loginDialog.setContentText("Login:");
+        Optional<String> loginResult = loginDialog.showAndWait();
+
+        if (loginResult.isPresent()) {
+            String login = loginResult.get();
+
+            TextInputDialog passwordDialog = new TextInputDialog();
+            passwordDialog.setTitle("Create Student");
+            passwordDialog.setHeaderText("Enter Group name");
+            passwordDialog.setContentText("Group name:");
+            Optional<String> passwordResult = passwordDialog.showAndWait();
+
+            if (passwordResult.isPresent()) {
+                String password = passwordResult.get();
+
+                // Create the user using the login and password
+                // Your implementation here
+                System.out.println("Created Student to group: " + login + " " + password);
+
+                showSuccessDialog("Student created successfully.");
+                serverThread.send("Asttg" + login + "::" + password);
+            } else {
+                // User canceled entering the password
+                System.out.println("Student creation canceled.");
+            }
+        } else {
+            // User canceled entering the login
+            System.out.println("Student creation canceled.");
+        }
+    }
+
+
+    @FXML
+    public void addSubjectToGroup() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Create Student");
+        dialog.setHeaderText("Enter Student Details");
+
+        TextInputDialog loginDialog = new TextInputDialog();
+        loginDialog.setTitle("Create Student");
+        loginDialog.setHeaderText("Enter Student Login");
+        loginDialog.setContentText("Subject Name:");
+        Optional<String> loginResult = loginDialog.showAndWait();
+
+        if (loginResult.isPresent()) {
+            String login = loginResult.get();
+
+            TextInputDialog passwordDialog = new TextInputDialog();
+            passwordDialog.setTitle("Create Student");
+            passwordDialog.setHeaderText("Enter Student Password");
+            passwordDialog.setContentText("Group Name:");
+            Optional<String> passwordResult = passwordDialog.showAndWait();
+
+            if (passwordResult.isPresent()) {
+                String password = passwordResult.get();
+
+                // Create the user using the login and password
+                // Your implementation here
+                System.out.println("Connect subject - group: " + login + " " + password);
+
+                showSuccessDialog("Connect subject - group successfully.");
+                serverThread.send("Asutg" + login + "::" + password);
+            } else {
+                // User canceled entering the password
+                System.out.println("Student creation canceled.");
+            }
+        } else {
+            // User canceled entering the login
+            System.out.println("Student creation canceled.");
+        }
+    }
+
+
     public void changeTeacher(){
 
     }

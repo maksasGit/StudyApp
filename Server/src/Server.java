@@ -264,4 +264,16 @@ public class Server {
         String password = data.split("::")[1];
         storage.addStudent(login,password);
     }
+
+    public void addStudentToGroup(ClientThread clientThread, String postfix) {
+        String userLogin = postfix.split("::")[0];
+        String groupName = postfix.split("::")[1];
+        storage.addStudentToGroup(userLogin, groupName);
+    }
+
+    public void addSubjectToGroup(ClientThread clientThread, String postfix) {
+        String subjecName = postfix.split("::")[0];
+        String groupName = postfix.split("::")[1];
+        storage.addSubjectGroup(subjecName , groupName);
+    }
 }

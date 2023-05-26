@@ -30,9 +30,9 @@
                         <Menu mnemonicParsing="false" text="Edit Group">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#changeGroup" text="Change Group name" />
-                                <MenuItem mnemonicParsing="false" onAction="#addSubject" text="Add Subject to Group" />
+                                <MenuItem mnemonicParsing="false" onAction="#addSubjectToGroup" text="Add Subject to Group" />
                                 <MenuItem mnemonicParsing="false" onAction="#removeSubject" text="Remove Subject from Group" />
-                                <MenuItem mnemonicParsing="false" onAction="#addStudent" text="Add Student to Group" />
+                                    <MenuItem mnemonicParsing="false" onAction="#addStudentToGroup" text="Add Student to Group" />
                                 <MenuItem mnemonicParsing="false" onAction="#removeStudent" text="Remove Student from Group" />
                             </items>
                         </Menu>

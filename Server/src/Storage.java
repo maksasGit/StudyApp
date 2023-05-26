@@ -819,4 +819,107 @@ public class Storage {
         }
     }
 
+    public void addStudentToGroup(String userLogin, String groupName) {
+        try {
+            // Get the group_id for the given group_name
+            int groupId = getGroupIdByName(groupName);
+
+            // Create the SQL query
+            String query = "UPDATE User SET group_id = ? WHERE login = ?";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, groupId);
+            statement.setString(2, userLogin);
+
+            // Execute the query
+            statement.executeUpdate();
+
+            // Close the statement
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+    }
+
+    private int getGroupIdByName(String groupName) throws SQLException {
+        // Create the SQL query
+        String query = "SELECT group_id FROM \"Group\" WHERE group_name = ?";
+
+        // Create a prepared statement
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, groupName);
+
+        // Execute the query and retrieve the result set
+        ResultSet resultSet = statement.executeQuery();
+
+        // Get the group_id value
+        int groupId = -1;
+        if (resultSet.next()) {
+            groupId = resultSet.getInt("group_id");
+        }
+
+        // Close the result set and statement
+        resultSet.close();
+        statement.close();
+
+        return groupId;
+    }
+
+    public void addSubjectGroup(String subjectName, String groupName) {
+        try {
+            // Get the subject_id for the given subjectName
+            int subjectId = getSubjectIdByName(subjectName);
+
+            // Get the group_id for the given groupName
+            int groupId = getGroupIdByName(groupName);
+
+            // Create the SQL query
+            String query = "INSERT INTO SubjectGroup (subject_id, group_id) VALUES (?, ?)";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, subjectId);
+            statement.setInt(2, groupId);
+
+            // Execute the query
+            statement.executeUpdate();
+
+            // Close the statement
+            statement.close();
+
+
+            System.out.println("added conection");
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            System.out.println("problem");
+            e.printStackTrace();
+        }
+    }
+
+    private int getSubjectIdByName(String subjectName) throws SQLException {
+        // Create the SQL query
+        String query = "SELECT subject_id FROM Subject WHERE subject_name = ?";
+
+        // Create a prepared statement
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, subjectName);
+
+        // Execute the query and retrieve the result set
+        ResultSet resultSet = statement.executeQuery();
+
+        // Get the subject_id value
+        int subjectId = -1;
+        if (resultSet.next()) {
+            subjectId = resultSet.getInt("subject_id");
+        }
+
+        // Close the result set and statement
+        resultSet.close();
+        statement.close();
+
+        return subjectId;
+    }
+
 }
