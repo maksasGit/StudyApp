@@ -235,6 +235,5 @@ public class AdminController {
     }
 
     public void initialize(){
-        list.setVisible(false);
     }
 }

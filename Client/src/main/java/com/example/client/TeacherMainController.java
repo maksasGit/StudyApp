@@ -2,11 +2,16 @@ package com.example.client;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +39,8 @@ public class TeacherMainController {
     private TextArea outputArea;
     @FXML
     private Button confirm;
+    @FXML
+    private Button exit;
     private CustomTreeItem<String> selectedItem;
     private CustomTreeItem<String> previousSelectedItem;
 
@@ -254,6 +261,23 @@ public class TeacherMainController {
     public void createTest(){
     }
 
+    public void onExitAction(){
+            String fxmlFile = "LogIn.fxml";
+            Platform.runLater(() -> {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
+                try {
+                    Parent root = fxmlLoader.load();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root, 800, 600));
+                    stage.setTitle("Welcome!");
+                    stage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to load " + fxmlFile + ": " + e.getMessage(), e);
+                }
+            });
+
+    }
+
     public void onConfirmAction(){
         String[] questions = outputArea.getText().split("\n");
         String questionText = "";
@@ -267,30 +291,6 @@ public class TeacherMainController {
         outputLabel.setText("Choose something");
         send.setVisible(false);
         confirm.setVisible(false);
-    }
-
-    //#####################################################################
-    //#########################SUBJECT_EDITOR##############################
-
-    public void updateSubject(){
-    }
-
-    public void deleteSubject(){
-    }
-
-    public void addSubject(){
-    }
-
-    //#####################################################################
-    //#########################TOPIC_EDITOR##############################
-
-    public void updateTopic(){
-    }
-
-    public void deleteTopic(){
-    }
-
-    public void addTopic(){
     }
 
 }

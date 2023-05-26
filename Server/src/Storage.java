@@ -16,7 +16,7 @@ public class Storage {
             Class.forName("org.sqlite.JDBC");
 
             // Establish a connection to the database
-            String url = "jdbc:sqlite:C:/Users/imaks/OneDrive/Desktop/StudyApp/Server/DataBase/DB.sqlite";
+            String url = "jdbc:sqlite:B:/StudyApp-master/Server/DataBase/DB.sqlite";
             connection = DriverManager.getConnection(url);
             System.out.println("Connected to the database.");
         } catch (ClassNotFoundException | SQLException e) {

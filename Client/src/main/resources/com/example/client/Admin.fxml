@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #49A6B8;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminController">
     <children>
-        <MenuBar fx:id="menuBar" prefHeight="26.0" prefWidth="558.0">
+        <MenuBar fx:id="menuBar" prefHeight="26.0" prefWidth="558.0" style="-fx-background-color: ea5e3a;">
             <menus>
-                <Menu mnemonicParsing="false" text="Create">
+                <Menu mnemonicParsing="false" text="Создать">
                     <items>
-                        <Menu mnemonicParsing="false" text="Create user">
+                        <Menu mnemonicParsing="false" text="Создать аккаунт">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#createUser" text="Create Student " />
-                                <MenuItem mnemonicParsing="false" onAction="#createTeacher" text="Create Teacher" />
+                                <MenuItem mnemonicParsing="false" onAction="#createUser" text="Создать аккаунт студента" />
+                                <MenuItem mnemonicParsing="false" onAction="#createTeacher" text="Создать аккаунт преподавателя" />
                             </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" onAction="#createGroup" text="Create Group" />
+                        <MenuItem mnemonicParsing="false" onAction="#createGroup" text="Создать группу" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu mnemonicParsing="false" text="Управлять учебным процессом">
                     <items>
-                              <MenuItem mnemonicParsing="false" onAction="#addStudentToGroup" text="Add Student to Group" />
-                          <MenuItem mnemonicParsing="false" onAction="#addSubjectToGroup" text="Add Subject to Group" />
+                              <MenuItem mnemonicParsing="false" onAction="#addStudentToGroup" text="Добавить студента к группе" />
+                          <MenuItem mnemonicParsing="false" onAction="#addSubjectToGroup" text="Добавить дисциплину группе" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
+      <Label text="Окно администратора" textFill="#ea5e3a">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="347.0" fitWidth="600.0">
+         <image>
+            <Image url="B:/StudyApp-master/Client/images/pic.jpg" />
+         </image>
+      </ImageView>
     </children>
 </VBox>
