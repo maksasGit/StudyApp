@@ -210,11 +210,7 @@ public class Server {
     //###############################################################################
     //############################ADMIN##############################################
 
-    // sendGroups
-        public void sendGropus(ClientThread receiver){
-            // storage.getGroups()
-            receiver.send("GR");
-        }
+
 
     // sendStudents
         public void sendStudents(ClientThread receiver){
@@ -222,17 +218,6 @@ public class Server {
             receiver.send("sl"+storage.getStudents());
         }
 
-    // getAddInGroup
-
-        public void getAddInGroup(ClientThread sender, String addInGroup){
-            //storage.addInGroup(userId, groupId)
-        }
-
-    // getRemoveFromGroup
-
-        public void getRemoveFromGroup(ClientThread sender, String removeFromGroup){
-            // storage.removeFromGroup(userId , groupId)
-        }
 
 
     // getGroup
@@ -241,16 +226,7 @@ public class Server {
              storage.addGroup(newGroup);
         }
 
-    // getUpdateGroup
 
-        public void getUpdateGroup(ClientThread sender, String update){
-            // storage.updateGroup(groupId,update)
-        }
-
-    // getDeleteGroup
-        public void getDeleteGroup(ClientThread sender, String delete){
-            //storage.deleteGroup(groupId)
-        }
 
         public void addTeacher(ClientThread sender, String data){
             String login = data.split("::")[0];
