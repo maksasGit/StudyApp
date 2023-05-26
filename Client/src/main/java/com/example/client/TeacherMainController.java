@@ -289,7 +289,7 @@ public class TeacherMainController {
     @FXML
     private void exitApplication(){
         getStage().close();
-        receiver.setStudentMainController(null);
+        receiver.setTeacherController(null);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LogIn.fxml"));
         fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, serverThread.getReceiver()));
 
