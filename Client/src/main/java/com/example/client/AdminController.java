@@ -176,6 +176,11 @@ public class AdminController {
         serverThread.send("GLsub");
     }
 
+
+
+    public String selectedUserID;
+    public String selectedGroupId;
+
     public void chooseStudent(String textList){
 
         Platform.runLater(() -> {
@@ -194,6 +199,8 @@ public class AdminController {
             String selectedItem = (String) list.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 System.out.println("Selected: " + selectedItem);
+                serverThread.send("Gublo");
+                listClear();
             }
         });
     }
@@ -232,6 +239,7 @@ public class AdminController {
                 list.getItems().add(group_name);
             }
         }
+
     }
 
 
