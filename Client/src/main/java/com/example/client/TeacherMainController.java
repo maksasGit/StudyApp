@@ -209,10 +209,20 @@ public class TeacherMainController {
         Platform.runLater(() -> {
             outputLabel.setText(parts[2] + " - " + parts[1]);
             outputArea.clear();
-            for (int i = 3; i < ((parts.length - 3) / 2)  + 3; i++) {
-                outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 3) / 2] + "\n\n\n");
+            setTextFieldPreviusResult(parts[3]);
+            for (int i = 4; i < ((parts.length - 4) / 2)  + 3; i++) {
+                outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 4) / 2] + "\n\n\n");
             }
         });
+    }
+
+
+    public void setTextFieldPreviusResult(String result){
+        if (!result.isEmpty())  {
+            textArea.setText(result);
+        } else {
+            textArea.clear();
+        }
     }
 
 

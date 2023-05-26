@@ -233,7 +233,9 @@ public class Storage {
         // Retrieve user information
         String userInfo = getUserInfo(tryId);
         getTry.append(userInfo).append("::");
-
+        
+        String result = getResultByTryID(Integer.parseInt(tryId));
+        getTry.append(result).append("::");
 
         // Get questions for it test
         String questions = getTestByID(testInfo.split("::")[0]);
@@ -250,6 +252,36 @@ public class Storage {
         getTry.append(answers);
 
         return getTry.toString();
+    }
+
+    public String getResultByTryID(int tryId) {
+        String result = "";
+
+        try {
+            // Create the SQL query
+            String query = "SELECT result FROM Try WHERE try_id = ?";
+
+            // Create a prepared statement
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, tryId);
+
+            // Execute the query and retrieve the result set
+            ResultSet resultSet = statement.executeQuery();
+
+            // Get the result value
+            if (resultSet.next()) {
+                result = resultSet.getString("result");
+            }
+
+            // Close the result set and statement
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            // Handle any errors that occur during the database operation
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     private String getTestInfo(String tryId) {

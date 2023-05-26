@@ -50,7 +50,5 @@ public class ClientGUIReceiver {
         this.studentController.getResultNotTest(postfix);
     }
 
-    public void getStudentsList(String postfix) {
-        this.adminController.chooseStudent(postfix);
-    }
+
 }
