@@ -22,21 +22,20 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Управлять учебным процессом">
                     <items>
-                              <MenuItem mnemonicParsing="false" onAction="#addStudentToGroup" text="Добавить студента к группе" />
-                          <MenuItem mnemonicParsing="false" onAction="#addSubjectToGroup" text="Добавить дисциплину группе" />
+                        <MenuItem mnemonicParsing="false" onAction="#addStudentToGroup" text="Добавить студента к группе" />
+                        <MenuItem mnemonicParsing="false" onAction="#addSubjectToGroup" text="Добавить дисциплину группе" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-      <Label text="Окно администратора" textFill="#ea5e3a">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="347.0" fitWidth="600.0">
-         <image>
-            <Image url="B:/StudyApp-master/Client/images/pic.jpg" />
-         </image>
-      </ImageView>
+        <Label text="Окно администратора" textFill="#ea5e3a">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="347.0" fitWidth="600.0">
+            <!-- Image here -->
+        </ImageView>
+        <Button text="Выход" onAction="#exitApplication" />
     </children>
 </VBox>

@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -41,6 +43,8 @@ public class TeacherMainController {
     private Button confirm;
     @FXML
     private Button exit;
+    @FXML
+    private HBox mainWindow;
     private CustomTreeItem<String> selectedItem;
     private CustomTreeItem<String> previousSelectedItem;
 
@@ -261,22 +265,7 @@ public class TeacherMainController {
     public void createTest(){
     }
 
-    public void onExitAction(){
-            String fxmlFile = "LogIn.fxml";
-            Platform.runLater(() -> {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-                try {
-                    Parent root = fxmlLoader.load();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root, 800, 600));
-                    stage.setTitle("Welcome!");
-                    stage.show();
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to load " + fxmlFile + ": " + e.getMessage(), e);
-                }
-            });
 
-    }
 
     public void onConfirmAction(){
         String[] questions = outputArea.getText().split("\n");
@@ -291,6 +280,29 @@ public class TeacherMainController {
         outputLabel.setText("Choose something");
         send.setVisible(false);
         confirm.setVisible(false);
+    }
+
+    private Stage getStage() {
+        return (Stage) mainWindow.getScene().getWindow();
+    }
+
+    @FXML
+    private void exitApplication(){
+        getStage().close();
+        receiver.setStudentMainController(null);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LogIn.fxml"));
+        fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, serverThread.getReceiver()));
+
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 300, 300));
+        stage.setTitle("Client");
+        stage.show();
     }
 
 }

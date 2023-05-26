@@ -2,9 +2,13 @@ package com.example.client;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -226,6 +230,25 @@ public class AdminController {
 
     private Stage getStage() {
         return (Stage) menuBar.getScene().getWindow();
+    }
+
+
+    @FXML
+    private void exitApplication(){
+        getStage().close();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LogIn.fxml"));
+        fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, serverThread.getReceiver()));
+
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 300, 300));
+        stage.setTitle("Client");
+        stage.show();
     }
 
 

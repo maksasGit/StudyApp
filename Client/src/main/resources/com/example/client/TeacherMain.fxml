@@ -6,14 +6,12 @@
 <?import javafx.scene.text.*?>
 
 <HBox fx:id="mainWindow" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #49A6B8;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.TeacherMainController">
-
    <children>
       <VBox prefHeight="400.0" prefWidth="250.0">
          <children>
             <TreeView fx:id="tree" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" />
          </children>
       </VBox>
-
       <VBox alignment="CENTER" prefHeight="600.0" prefWidth="550.0" style="-fx-background-color: #49A6B8;">
          <children>
             <Label fx:id="outputLabel" alignment="CENTER" prefHeight="25.0" prefWidth="300.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Окно преподавателя" textAlignment="CENTER" textFill="#ea5e3a">
@@ -22,10 +20,9 @@
                </VBox.margin>
                <font>
                   <Font size="8.0" />
-               </font></Label>
-
+               </font>
+            </Label>
             <TextArea fx:id="outputArea" prefHeight="399.0" prefWidth="550.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" wrapText="true" />
-
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" spacing="10">
                <children>
                   <TextField fx:id="textArea" prefHeight="31.0" prefWidth="250.0" style="-fx-font-size: 14px; -fx-background-color: #FFFFFF; -fx-border-color: #CCCCCC;" />
@@ -33,14 +30,15 @@
                   <Button fx:id="confirm" mnemonicParsing="false" onAction="#onConfirmAction" prefHeight="32.0" prefWidth="102.0" style="-fx-background-color: #E0D6CD;" text="Подтвердить" textFill="#84514e">
                      <font>
                         <Font size="14.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                </children>
             </HBox>
+            <Button id="exit" fx:id="exit" alignment="TOP_RIGHT" centerShape="false" contentDisplay="BOTTOM" ellipsisString="X" mnemonicParsing="false" onAction="#exitApplication" scaleShape="false" style="-fx-background-color: #E0D6CD;" text="X" textAlignment="CENTER" textFill="#ea5e3a" />
          </children>
          <HBox.margin>
             <Insets left="25.0" right="25.0" />
          </HBox.margin>
       </VBox>
-      <Button id="exit" fx:id="exit" alignment="TOP_RIGHT" centerShape="false" contentDisplay="BOTTOM" ellipsisString="X" mnemonicParsing="false" onAction="#onExitAction" scaleShape="false" style="-fx-background-color: #E0D6CD;" text="X" textAlignment="CENTER" textFill="#ea5e3a" />
    </children>
 </HBox>

@@ -1,11 +1,16 @@
 package com.example.client;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +31,8 @@ public class StudentMainController {
     @FXML
     private TreeView<String> subjectTreeView;
 
+    @FXML
+    private HBox main;
     @FXML
     private Label outputLabel;
 
@@ -111,6 +118,29 @@ public class StudentMainController {
 
     public void initialize() {
         serverThread.send("STT__");
+    }
+
+
+    private Stage getStage() {
+        return (Stage) main.getScene().getWindow();
+    }
+    @FXML
+    private void exitApplication(){
+        getStage().close();
+        receiver.setStudentMainController(null);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LogIn.fxml"));
+        fxmlLoader.setControllerFactory(controllerClass -> new LogInController(serverThread, serverThread.getReceiver()));
+
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root, 300, 300));
+        stage.setTitle("Client");
+        stage.show();
     }
 
     public void getResultNotTest(String result) {
