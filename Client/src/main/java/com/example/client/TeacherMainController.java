@@ -221,7 +221,7 @@ public class TeacherMainController {
             outputLabel.setText(parts[2] + " - " + parts[1]);
             outputArea.clear();
             setTextFieldPreviusResult(parts[3]);
-            for (int i = 4; i < ((parts.length - 4) / 2)  + 3; i++) {
+            for (int i = 4; i < ((parts.length - 4) / 2)  + 4; i++) {
                 outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 4) / 2] + "\n\n\n");
             }
         });
@@ -229,7 +229,7 @@ public class TeacherMainController {
 
 
     public void setTextFieldPreviusResult(String result){
-        if (!result.isEmpty())  {
+        if (!result.isEmpty() && !result.equals("null"))  {
             textArea.setText(result);
         } else {
             textArea.clear();
@@ -252,18 +252,7 @@ public class TeacherMainController {
     //#####################################################################
     //#########################TEST_EDITOR#################################
 
-    public void showTest(){
 
-    }
-
-    public void deleteTest(){
-    }
-
-    public void updateTest(){
-    }
-
-    public void createTest(){
-    }
 
 
 
