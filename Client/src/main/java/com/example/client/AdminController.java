@@ -176,7 +176,7 @@ public class AdminController {
         serverThread.send("GLsub");
     }
 
-    public String chooseStudent(String textList){
+    public void chooseStudent(String textList){
 
         Platform.runLater(() -> {
             label.setText("Choose student");
@@ -198,7 +198,7 @@ public class AdminController {
         });
     }
 
-    public String chooseSubject(String textList){
+    public void chooseSubject(String textList){
         label.setText("Choose subject");
         String[] mainParts = textList.split("\\*\\*");
         for (String part: mainParts){
