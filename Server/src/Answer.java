@@ -1,9 +1,6 @@
 public class Answer {
     private String answer;
     public enum SolutionStatus {
-        CORRECT,
-        WRONG,
-        PARTIAL,
         NOT_VERIFIED
     }
 

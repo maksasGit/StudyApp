@@ -53,7 +53,7 @@ public class TeacherMainController {
 
     public void updateTreeView(String textTree) {
         Platform.runLater(() -> {
-            CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else", "0");
+            CustomTreeItem<String> root = new CustomTreeItem<>("Список дисциплин", "Else", "0");
             tree.setRoot(root);
             Tree newTree = Tree.fromSend(textTree);
             addItemsToTreeView(root, newTree.items, 1);
@@ -67,20 +67,20 @@ public class TeacherMainController {
                     outputArea.clear();
                     textArea.clear();
                     confirm.setVisible(true);
-                    outputLabel.setText("EnterTestName");
+                    outputLabel.setText("Введите название теста");
                     outputArea.setVisible(true);
                     send.setVisible(false);
                     textArea.setVisible(false);
                     TextInputDialog dialog = new TextInputDialog();
-                    dialog.setTitle("Add new item");
-                    dialog.setHeaderText("Enter the name of the new item:");
+                    dialog.setTitle("Добавление теста");
+                    dialog.setHeaderText("Введите название нового объекта:");
                     dialog.showAndWait().ifPresent(name -> {
                         outputLabel.setText(name);
                     });
                 } else {
                     TextInputDialog dialog = new TextInputDialog();
-                    dialog.setTitle("Add new item");
-                    dialog.setHeaderText("Enter the name of the new item:");
+                    dialog.setTitle("Добавить новый объект");
+                    dialog.setHeaderText("Введите название нового объекта:");
                     dialog.showAndWait().ifPresent(name -> {
                         CustomTreeItem<String> newItem = new CustomTreeItem<>(name);
                         if (selectedItem.getType().equals("Else")) {
@@ -100,8 +100,8 @@ public class TeacherMainController {
                 if (selectedItem != null && selectedItem != root) {
                     if (!selectedItem.getType().equals("Test")) {
                         TextInputDialog dialog = new TextInputDialog(selectedItem.getValue());
-                        dialog.setTitle("Update item");
-                        dialog.setHeaderText("Enter the new name for " + selectedItem.getType() + ": ");
+                        dialog.setTitle("Изменить объект");
+                        dialog.setHeaderText("Введите новое название для " + selectedItem.getType() + ": ");
                         dialog.showAndWait().ifPresent(name -> selectedItem.setValue(name));
                         String newName = selectedItem.getValue();
                         if (selectedItem.getType().equals("Subject")) {
@@ -222,7 +222,7 @@ public class TeacherMainController {
             outputArea.clear();
             setTextFieldPreviusResult(parts[3]);
             for (int i = 4; i < ((parts.length - 4) / 2)  + 4; i++) {
-                outputArea.appendText(parts[i] + " \nStudent answer: " + parts[i + (parts.length - 4) / 2] + "\n\n\n");
+                outputArea.appendText(parts[i] + " \nОтвет студента: " + parts[i + (parts.length - 4) / 2] + "\n\n\n");
             }
         });
     }
@@ -242,7 +242,9 @@ public class TeacherMainController {
         if (!textArea.getText().isEmpty()) {
             outputArea.setVisible(false);
             textArea.setVisible(false);
-            outputLabel.setText("Choose something");
+            confirm.setVisible(false);
+            send.setVisible(false);
+            outputLabel.setText("Окно преподавателя");
             serverThread.send("STRYR" + choosenTryId + "::" + textArea.getText() );
             textArea.clear();
         }
@@ -266,7 +268,7 @@ public class TeacherMainController {
         clearTree();
         outputArea.setVisible(false);
         textArea.setVisible(false);
-        outputLabel.setText("Choose something");
+        outputLabel.setText("Окно преподавателя");
         send.setVisible(false);
         confirm.setVisible(false);
     }
@@ -290,7 +292,7 @@ public class TeacherMainController {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root, 300, 300));
-        stage.setTitle("Client");
+        stage.setTitle("Клиент");
         stage.show();
     }
 

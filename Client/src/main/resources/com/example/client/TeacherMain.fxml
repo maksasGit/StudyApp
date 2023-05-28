@@ -34,7 +34,7 @@
                   </Button>
                </children>
             </HBox>
-            <Button id="exit" fx:id="exit" alignment="TOP_RIGHT" centerShape="false" contentDisplay="BOTTOM" ellipsisString="X" mnemonicParsing="false" onAction="#exitApplication" scaleShape="false" style="-fx-background-color: #E0D6CD;" text="X" textAlignment="CENTER" textFill="#ea5e3a" />
+            <Button id="exit" fx:id="exit" alignment="TOP_RIGHT" centerShape="false" contentDisplay="BOTTOM" ellipsisString="X" mnemonicParsing="false" onAction="#exitApplication" scaleShape="false" style="-fx-background-color: #E0D6CD;" text="Выход" textAlignment="CENTER" textFill="#ea5e3a" />
          </children>
          <HBox.margin>
             <Insets left="25.0" right="25.0" />

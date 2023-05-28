@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -74,7 +75,7 @@ public class LogInController {
                     Parent root = fxmlLoader.load();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root, 800, 600));
-                    stage.setTitle("Client - " + username);
+                    stage.setTitle("Клиент - " + username);
                     stage.show();
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to load " + fxmlFile + ": " + e.getMessage(), e);
@@ -84,6 +85,15 @@ public class LogInController {
                 Stage mainStage = (Stage) root.getScene().getWindow();
                 mainStage.close();
             });
+        }
+        else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Неправильный логин или пароль");
+                alert.setTitle("Ошибка!");
+                alert.setHeaderText("Не удалось войти в аккаунт");
+                alert.showAndWait();
+            });
+
         }
 
     }

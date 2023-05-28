@@ -32,22 +32,22 @@ public class AdminController {
     @FXML
     public void createTeacher() {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Create Teacher");
-        dialog.setHeaderText("Enter Teacher Details");
+        dialog.setTitle("Создать аккаунт преподавателя");
+        dialog.setHeaderText("Ввод данных");
 
         TextInputDialog loginDialog = new TextInputDialog();
-        loginDialog.setTitle("Create Teacher");
-        loginDialog.setHeaderText("Enter Teacher Login");
-        loginDialog.setContentText("Login:");
+        loginDialog.setTitle("Создать аккаунт преподавателя");
+        loginDialog.setHeaderText("Ввод логина");
+        loginDialog.setContentText("Логин:");
         Optional<String> loginResult = loginDialog.showAndWait();
 
         if (loginResult.isPresent()) {
             String login = loginResult.get();
 
             TextInputDialog passwordDialog = new TextInputDialog();
-            passwordDialog.setTitle("Create Teacher");
-            passwordDialog.setHeaderText("Enter Teacher Password");
-            passwordDialog.setContentText("Password:");
+            passwordDialog.setTitle("Создать аккаунт преподавателя");
+            passwordDialog.setHeaderText("Ввод пароля");
+            passwordDialog.setContentText("Пароль:");
             Optional<String> passwordResult = passwordDialog.showAndWait();
 
             if (passwordResult.isPresent()) {
@@ -57,7 +57,7 @@ public class AdminController {
                 // Your implementation here
                 System.out.println("Created teacher: " + login + " " + password);
 
-                showSuccessDialog("Teacher created successfully.");
+                showSuccessDialog("Аккаунт создан успешно!");
                 serverThread.send("Ateac" + login + "::" + password);
             } else {
                 // User canceled entering the password
@@ -72,22 +72,22 @@ public class AdminController {
     @FXML
     public void createUser() {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Create Student");
-        dialog.setHeaderText("Enter Student Details");
+        dialog.setTitle("Создать аккаунт студента");
+        dialog.setHeaderText("Ввод данных");
 
         TextInputDialog loginDialog = new TextInputDialog();
-        loginDialog.setTitle("Create Student");
-        loginDialog.setHeaderText("Enter Student Login");
-        loginDialog.setContentText("Login:");
+        loginDialog.setTitle("Создать аккаунт студента");
+        loginDialog.setHeaderText("Ввод логина");
+        loginDialog.setContentText("Логин:");
         Optional<String> loginResult = loginDialog.showAndWait();
 
         if (loginResult.isPresent()) {
             String login = loginResult.get();
 
             TextInputDialog passwordDialog = new TextInputDialog();
-            passwordDialog.setTitle("Create Student");
-            passwordDialog.setHeaderText("Enter Student Password");
-            passwordDialog.setContentText("Password:");
+            passwordDialog.setTitle("Создать аккаунт студента");
+            passwordDialog.setHeaderText("Ввод пароля");
+            passwordDialog.setContentText("Пароль:");
             Optional<String> passwordResult = passwordDialog.showAndWait();
 
             if (passwordResult.isPresent()) {
@@ -97,7 +97,7 @@ public class AdminController {
                 // Your implementation here
                 System.out.println("Created Student: " + login + " " + password);
 
-                showSuccessDialog("Student created successfully.");
+                showSuccessDialog("Аккаунт создан успешно!");
                 serverThread.send("Astud" + login + "::" + password);
             } else {
                 // User canceled entering the password
@@ -112,13 +112,13 @@ public class AdminController {
     @FXML
     public void createGroup() {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Create Group");
-        dialog.setHeaderText("Enter Group Details");
+        dialog.setTitle("Создать группу");
+        dialog.setHeaderText("Ввод данных");
 
         TextInputDialog groupNameDialog = new TextInputDialog();
-        groupNameDialog.setTitle("Create Group");
-        groupNameDialog.setHeaderText("Enter Group Name");
-        groupNameDialog.setContentText("Group Name:");
+        groupNameDialog.setTitle("Создать группу");
+        groupNameDialog.setHeaderText("Ввод номера группы");
+        groupNameDialog.setContentText("Номер группы:");
         Optional<String> groupNameResult = groupNameDialog.showAndWait();
 
         if (groupNameResult.isPresent()) {
@@ -127,7 +127,7 @@ public class AdminController {
             // Create the group using the group name
             // Your implementation here
             System.out.println("Created group: " + groupName);
-            showSuccessDialog("Group created successfully.");
+            showSuccessDialog("Группа создана успешно!");
             serverThread.send("Agrou" + groupName);
         } else {
             // User canceled entering the group name
@@ -139,22 +139,22 @@ public class AdminController {
     @FXML
     public void addStudentToGroup() {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Create Student");
-        dialog.setHeaderText("Enter Student Details");
+        dialog.setTitle("Добавить студента к группе");
+        dialog.setHeaderText("Ввод данных");
 
         TextInputDialog loginDialog = new TextInputDialog();
-        loginDialog.setTitle("Create Student");
-        loginDialog.setHeaderText("Enter Student Login");
-        loginDialog.setContentText("Login:");
+        loginDialog.setTitle("Выбор студента");
+        loginDialog.setHeaderText("Ввод логина");
+        loginDialog.setContentText("Логин:");
         Optional<String> loginResult = loginDialog.showAndWait();
 
         if (loginResult.isPresent()) {
             String login = loginResult.get();
 
             TextInputDialog passwordDialog = new TextInputDialog();
-            passwordDialog.setTitle("Create Student");
-            passwordDialog.setHeaderText("Enter Group name");
-            passwordDialog.setContentText("Group name:");
+            passwordDialog.setTitle("Выбор группы");
+            passwordDialog.setHeaderText("Ввод номера группы");
+            passwordDialog.setContentText("Номер группы:");
             Optional<String> passwordResult = passwordDialog.showAndWait();
 
             if (passwordResult.isPresent()) {
@@ -164,7 +164,7 @@ public class AdminController {
                 // Your implementation here
                 System.out.println("Created Student to group: " + login + " " + password);
 
-                showSuccessDialog("Student created successfully.");
+                showSuccessDialog("Студент добавлен к группе!");
                 serverThread.send("Asttg" + login + "::" + password);
             } else {
                 // User canceled entering the password
@@ -180,22 +180,22 @@ public class AdminController {
     @FXML
     public void addSubjectToGroup() {
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Create Student");
-        dialog.setHeaderText("Enter Student Details");
+        dialog.setTitle("Добавить дисциплину группе");
+        dialog.setHeaderText("Ввод данных");
 
         TextInputDialog loginDialog = new TextInputDialog();
-        loginDialog.setTitle("Create Student");
-        loginDialog.setHeaderText("Enter Student Login");
-        loginDialog.setContentText("Subject Name:");
+        loginDialog.setTitle("Выбор дисциплины");
+        loginDialog.setHeaderText("Ввод названия дисциплины");
+        loginDialog.setContentText("Название дисциплины:");
         Optional<String> loginResult = loginDialog.showAndWait();
 
         if (loginResult.isPresent()) {
             String login = loginResult.get();
 
             TextInputDialog passwordDialog = new TextInputDialog();
-            passwordDialog.setTitle("Create Student");
-            passwordDialog.setHeaderText("Enter Student Password");
-            passwordDialog.setContentText("Group Name:");
+            passwordDialog.setTitle("Выбор группы");
+            passwordDialog.setHeaderText("Ввод номера группы");
+            passwordDialog.setContentText("Номер группы:");
             Optional<String> passwordResult = passwordDialog.showAndWait();
 
             if (passwordResult.isPresent()) {
@@ -205,7 +205,7 @@ public class AdminController {
                 // Your implementation here
                 System.out.println("Connect subject - group: " + login + " " + password);
 
-                showSuccessDialog("Connect subject - group successfully.");
+                showSuccessDialog("Дисциплина успешно добавлена!");
                 serverThread.send("Asutg" + login + "::" + password);
             } else {
                 // User canceled entering the password
@@ -221,7 +221,7 @@ public class AdminController {
 
     private void showSuccessDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
+        alert.setTitle("Успешно");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initOwner(getStage());
@@ -247,7 +247,7 @@ public class AdminController {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root, 300, 300));
-        stage.setTitle("Client");
+        stage.setTitle("Клиент");
         stage.show();
     }
 

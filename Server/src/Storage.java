@@ -16,7 +16,7 @@ public class Storage {
             Class.forName("org.sqlite.JDBC");
 
             // Establish a connection to the database
-            String url = "jdbc:sqlite:C:\\Users\\imaks\\OneDrive\\Desktop\\StudyApp\\Server\\DataBase\\DB.sqlite";
+            String url = "jdbc:sqlite:B:/StudyApp-master//Server/DataBase/DB.sqlite";
             connection = DriverManager.getConnection(url);
             System.out.println("Connected to the database.");
         } catch (ClassNotFoundException | SQLException e) {
@@ -832,13 +832,13 @@ public class Storage {
     public void addStudent(String login, String password) {
         try {
             // Create the SQL query
-            String query = "INSERT INTO User (login, password, user_type_id) VALUES (?, ?, ?)";
+            String query = "INSERT INTO User (login, password, user_type_id) VALUES (?, ?, 3)";
 
             // Create a prepared statement
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, login);
             statement.setString(2, password);
-            statement.setInt(3, 1);
+
 
             // Execute the query
             statement.executeUpdate();

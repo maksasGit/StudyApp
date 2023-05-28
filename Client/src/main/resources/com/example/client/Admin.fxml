@@ -34,8 +34,9 @@
             </font>
         </Label>
         <ImageView fitHeight="347.0" fitWidth="600.0">
-            <!-- Image here -->
-        </ImageView>
-        <Button text="Выход" onAction="#exitApplication" />
+         <image>
+            <Image url="file:/B:/StudyApp-master/Client/images/pic.jpg" />
+         </image></ImageView>
+        <Button onAction="#exitApplication" text="Выход" />
     </children>
 </VBox>

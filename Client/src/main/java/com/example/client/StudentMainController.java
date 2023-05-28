@@ -47,7 +47,7 @@ public class StudentMainController {
     private CustomTreeItem<String> selectedItem;
 
     public void updateTreeView(String textTree) {
-        CustomTreeItem<String> root = new CustomTreeItem<>("My Subjects", "Else", "0");
+        CustomTreeItem<String> root = new CustomTreeItem<>("Список дисциплин", "Else", "0");
         subjectTreeView.setRoot(root);
         Tree newTree = Tree.fromSend(textTree);
         addItemsToTreeView(root, newTree.items, 1);
@@ -104,8 +104,10 @@ public class StudentMainController {
             }
             sendButton.setDisable(true);
             serverThread.send("GTRY_" + testID + "**" + answerQuestionNum);
+            outputArea.appendText("Тест завершён!");
         }
-        outputArea.appendText(questionText);
+        else
+            outputArea.appendText(questionText);
     }
 
     public void setAnswer() {
@@ -139,13 +141,13 @@ public class StudentMainController {
         }
         Stage stage = new Stage();
         stage.setScene(new Scene(root, 300, 300));
-        stage.setTitle("Client");
+        stage.setTitle("Клиент");
         stage.show();
     }
 
     public void getResultNotTest(String result) {
         sendButton.setDisable(true);
         outputArea.clear();
-        outputArea.appendText("Your Result is: " + result);
+        outputArea.appendText("Ваш результат: " + result);
     }
 }
