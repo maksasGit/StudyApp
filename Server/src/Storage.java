@@ -578,6 +578,11 @@ public class Storage {
 
             // add delete Test from TopicTest
 
+            String deleteTopicTestQuery = "DELETE FROM TopicTest WHERE test_id = ?";
+            PreparedStatement deleteTopicTestStatement = connection.prepareStatement(deleteTopicTestQuery);
+            deleteTestQuestionStatement.setString(1, testID);
+            deleteTestQuestionStatement.executeUpdate();
+
 
             // Delete the record from the 'Test' table for the specified test ID
             String deleteTestQuery = "DELETE FROM Test WHERE test_id = ?";
