@@ -16,7 +16,7 @@ public class Storage {
             Class.forName("org.sqlite.JDBC");
 
             // Establish a connection to the database
-            String url = "jdbc:sqlite:C:\\Users\\imaks\\OneDrive\\Desktop\\StudyApp\\Server\\DataBase\\DB.sqlite";
+            String url = "jdbc:sqlite:DataBase/DB.sqlite";
             connection = DriverManager.getConnection(url);
             System.out.println("Connected to the database.");
         } catch (ClassNotFoundException | SQLException e) {
@@ -187,6 +187,30 @@ public class Storage {
                 String question = resultSet.getString("question");
                 int questionNum = resultSet.getInt("question_num");
                 testString.append(question).append("**").append(questionNum).append("##");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve test questions from the database: " + e.getMessage());
+        }
+
+        return testString.toString();
+    }
+
+
+    public String getTestAnswersByID(String testID) {
+        StringBuilder testString = new StringBuilder();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT question_num, correct_answer FROM TestQuestion WHERE test_id = ?");
+            statement.setString(1, testID);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String answer = resultSet.getString("correct_answer");
+                int questionNum = resultSet.getInt("question_num");
+                testString.append(answer).append("**").append(questionNum).append("##");
             }
 
             resultSet.close();
@@ -383,7 +407,7 @@ public class Storage {
     }
 
 
-    public void saveTry(String testId, String userLogin, List<String> answers, List<String> answersNum) {
+    public int saveTry(String testId, String userLogin, List<String> answers, List<String> answersNum) {
         String userId = getUserIdbyUserLogin(userLogin);
         try {
             // Insert the new Try record
@@ -420,9 +444,11 @@ public class Storage {
                     tryAnswerStatement.executeUpdate();
                 }
             }
+            return tryId;
         } catch (SQLException e) {
             System.out.println("Failed to retrieve answers from the database: " + e.getMessage());
         }
+        return -1;
     }
 
 
@@ -485,7 +511,7 @@ public class Storage {
             System.out.println("Failed to update try result: " + e.getMessage());
         }
     }
-    public void addNewTest(String topicID, String testName, List<String> questions) {
+    public void addNewTest(String topicID, String testName, List<String> questions, List<String> correctAnswers) {
         try {
             // Insert the new test into the 'Test' table
             String insertTestQuery = "INSERT INTO Test (test_name) VALUES (?)";
@@ -511,12 +537,13 @@ public class Storage {
             insertTopicTestStatement.executeUpdate();
 
             // Insert questions into the 'TestQuestion' table
-            String insertQuestionQuery = "INSERT INTO TestQuestion (test_id, question, question_num) VALUES (?, ?, ?)";
+            String insertQuestionQuery = "INSERT INTO TestQuestion (test_id, question, question_num, correct_answer) VALUES (?, ?, ?, ?)";
             PreparedStatement insertQuestionStatement = connection.prepareStatement(insertQuestionQuery);
             for (int i = 0; i < questions.size(); i++) {
                 insertQuestionStatement.setInt(1, testId);
                 insertQuestionStatement.setString(2, questions.get(i));
                 insertQuestionStatement.setInt(3, i + 1);
+                insertQuestionStatement.setString(4, correctAnswers.get(i));
                 insertQuestionStatement.executeUpdate();
             }
 
@@ -548,6 +575,9 @@ public class Storage {
             PreparedStatement deleteTestQuestionStatement = connection.prepareStatement(deleteTestQuestionQuery);
             deleteTestQuestionStatement.setString(1, testID);
             deleteTestQuestionStatement.executeUpdate();
+
+            // add delete Test from TopicTest
+
 
             // Delete the record from the 'Test' table for the specified test ID
             String deleteTestQuery = "DELETE FROM Test WHERE test_id = ?";

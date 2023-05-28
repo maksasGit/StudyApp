@@ -97,8 +97,31 @@ public class Server {
                      answersNum.add(mainPart.split("::")[1]);
                  }
              }
-             storage.saveTry(testId , userLogin, answers , answersNum);
+             int tryId = storage.saveTry(testId , userLogin, answers , answersNum);
              System.out.println("try saved");
+
+
+             int newRestult = 0;
+             String getTest = storage.getTestAnswersByID(testId); //(q**q_n)##(q**q_n)
+             System.out.println(getTest);
+             String[] questionsParts = getTest.split("##");
+             for (String questionParts : questionsParts){
+                 String correctAnswer = questionParts.split("\\*\\*")[0];
+                 String correctAnswerNum = questionParts.split("\\*\\*")[1];
+                 for (int i = 0; i < answers.size(); i++) {
+                     System.out.println(answersNum.get(i) + " " + correctAnswerNum + " " + answers.get(i) + " " + correctAnswer);
+                     if (answersNum.get(i).equals(correctAnswerNum) && answers.get(i).equals(correctAnswer)) {
+                        newRestult++;
+                     }
+                 }
+             }
+             System.out.println("try checked");
+
+
+             storage.setTryResult(tryId , newRestult);
+             System.out.println("result set");
+
+             sender.send("Sr"+newRestult);
         }
 
     // sendTest
@@ -178,10 +201,14 @@ public class Server {
             String testName = mainParts[1];
             String topicId = mainParts[0];
             List<String> questions = new ArrayList<>();
-            for (int i = 2; i < mainParts.length; i++){
+            for (int i = 2; i < (mainParts.length-2)/2 + 2; i++){
                 questions.add(mainParts[i]);
             }
-            storage.addNewTest(topicId , testName , questions);
+            List<String> correct_answers = new ArrayList<>();
+            for (int i = (mainParts.length-2)/2 + 2; i < mainParts.length; i++ ){
+                correct_answers.add(mainParts[i]);
+            }
+            storage.addNewTest(topicId , testName , questions, correct_answers);
         }
 
     // getDeleteTest

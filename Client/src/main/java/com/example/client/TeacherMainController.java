@@ -259,12 +259,17 @@ public class TeacherMainController {
 
 
     public void onConfirmAction(){
-        String[] questions = outputArea.getText().split("\n");
+        String[] info = outputArea.getText().split("\n");
         String questionText = "";
-        for (String question : questions){
+        String answersText = "";
+        for (String inf : info){
+            String question = inf.split("\\[")[0];
+            String answer = inf.split("\\[")[1];
+            answer = answer.split("]")[0];
             questionText = questionText.concat("**" + question);
+            answersText = answersText.concat("**" + answer);
         }
-        serverThread.send("Ntest" + selectedItem.getAdditionalValue() + "**" + outputLabel.getText() + questionText);
+        serverThread.send("Ntest" + selectedItem.getAdditionalValue() + "**" + outputLabel.getText() + questionText + answersText);
         clearTree();
         outputArea.setVisible(false);
         textArea.setVisible(false);
